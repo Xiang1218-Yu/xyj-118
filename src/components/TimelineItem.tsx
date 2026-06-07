@@ -1,12 +1,14 @@
 import { motion } from 'framer-motion';
-import { MapPin, Clock, Star, Utensils, Film, Palette, Bike, Gift } from 'lucide-react';
-import type { Activity } from '../types';
+import { MapPin, Clock, Star, Utensils, Film, Palette, Bike, Gift, AlertCircle } from 'lucide-react';
+import type { Activity, DiffField } from '../types';
 import { cn } from '@/lib/utils';
 
 interface TimelineItemProps {
   activity: Activity;
   index: number;
   isLast: boolean;
+  differentFields?: DiffField[];
+  showDiffHighlight?: boolean;
 }
 
 const activityIcons = {
@@ -23,9 +25,26 @@ const activityColors = {
   surprise: 'bg-amber-500',
 };
 
-export function TimelineItem({ activity, index, isLast }: TimelineItemProps) {
+const diffFieldToClass: Record<DiffField, string> = {
+  name: 'ring-2 ring-amber-400 bg-amber-50/50',
+  description: 'ring-2 ring-blue-400 bg-blue-50/50',
+  location: 'ring-2 ring-green-400 bg-green-50/50',
+  cost: 'ring-2 ring-rose-400 bg-rose-50/50',
+  duration: 'ring-2 ring-purple-400 bg-purple-50/50',
+  time: 'ring-2 ring-indigo-400 bg-indigo-50/50',
+  type: 'ring-2 ring-orange-400 bg-orange-50/50',
+};
+
+export function TimelineItem({ activity, index, isLast, differentFields = [], showDiffHighlight = false }: TimelineItemProps) {
   const Icon = activityIcons[activity.type] || Palette;
   const iconColor = activityColors[activity.type];
+
+  const getDiffClass = (field: DiffField): string => {
+    if (!showDiffHighlight) return '';
+    return differentFields.includes(field) ? diffFieldToClass[field] : '';
+  };
+
+  const hasAnyDiff = showDiffHighlight && differentFields.length > 0;
 
   return (
     <motion.div
@@ -50,8 +69,17 @@ export function TimelineItem({ activity, index, isLast }: TimelineItemProps) {
         <Icon size={18} />
       </motion.div>
 
-      <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-border/50 hover:shadow-xl transition-shadow duration-300">
-        <div className="relative h-40 overflow-hidden">
+      <div className={cn(
+        "bg-white rounded-2xl shadow-lg overflow-hidden border border-border/50 hover:shadow-xl transition-all duration-300",
+        hasAnyDiff && "ring-2 ring-amber-300 shadow-amber-100 shadow-lg"
+      )}>
+        {hasAnyDiff && (
+          <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1.5 flex items-center gap-2">
+            <AlertCircle size={14} />
+            <span className="text-xs font-medium">此活动与其他方案不同</span>
+          </div>
+        )}
+        <div className={cn("relative h-40 overflow-hidden", getDiffClass('name'))}>
           <img
             src={activity.image}
             alt={activity.name}
@@ -61,13 +89,13 @@ export function TimelineItem({ activity, index, isLast }: TimelineItemProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
           <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between">
             <div>
-              <div className="flex items-center gap-2 text-white/90 text-sm">
+              <div className={cn("flex items-center gap-2 text-white/90 text-sm", getDiffClass('time') && "bg-amber-500/30 rounded px-1")}>
                 <Clock size={14} />
                 <span>{activity.time}</span>
                 <span className="text-white/60">·</span>
-                <span>{activity.duration}</span>
+                <span className={cn(getDiffClass('duration') && "bg-amber-500/30 rounded px-1")}>{activity.duration}</span>
               </div>
-              <h3 className="text-white font-semibold text-lg mt-1">
+              <h3 className={cn("text-white font-semibold text-lg mt-1", getDiffClass('name') && "bg-amber-500/30 rounded px-1")}>
                 {activity.name}
               </h3>
             </div>
@@ -83,11 +111,11 @@ export function TimelineItem({ activity, index, isLast }: TimelineItemProps) {
         </div>
 
         <div className="p-4 space-y-3">
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className={cn("text-sm text-muted-foreground leading-relaxed rounded-lg p-2 -mx-2", getDiffClass('description'))}>
             {activity.description}
           </p>
 
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className={cn("flex items-center gap-2 text-sm text-muted-foreground rounded-lg p-2 -mx-2", getDiffClass('location'))}>
             <MapPin size={14} className="text-primary" />
             <span>{activity.location}</span>
           </div>
@@ -108,7 +136,7 @@ export function TimelineItem({ activity, index, isLast }: TimelineItemProps) {
             </div>
           )}
 
-          <div className="flex items-center justify-between pt-2 border-t border-border">
+          <div className={cn("flex items-center justify-between pt-2 border-t border-border rounded-lg p-2 -mx-2", getDiffClass('cost'))}>
             <span className="text-sm text-muted-foreground">预计花费</span>
             <span className="font-semibold text-primary text-lg">
               ¥{activity.cost}

@@ -1,16 +1,20 @@
 import { create } from 'zustand';
-import type { UserPreferences, DatePlan } from '../types';
-import { generateDatePlan, savePlanToStorage, getSavedPlans, deletePlanFromStorage, clearAllPlans } from '../utils/planGenerator';
+import type { UserPreferences, DatePlan, PlanCount } from '../types';
+import { generateDatePlan, savePlanToStorage, getSavedPlans, deletePlanFromStorage, clearAllPlans, generateMultipleDatePlans } from '../utils/planGenerator';
 
 interface PlanState {
   preferences: UserPreferences;
   currentPlan: DatePlan | null;
+  currentPlans: DatePlan[];
+  selectedPlanIndex: number;
   savedPlans: DatePlan[];
   isGenerating: boolean;
   setRelationshipStage: (stage: UserPreferences['relationshipStage']) => void;
   toggleInterest: (interest: string) => void;
   setBudget: (budget: UserPreferences['budget']) => void;
+  setPlanCount: (count: PlanCount) => void;
   generatePlan: () => Promise<DatePlan>;
+  generateMultiplePlans: () => Promise<DatePlan[]>;
   saveCurrentPlan: () => void;
   clearCurrentPlan: () => void;
   loadSavedPlans: () => void;
@@ -18,17 +22,21 @@ interface PlanState {
   deleteSavedPlan: (planId: string) => void;
   loadPlan: (plan: DatePlan) => void;
   clearAllSavedPlans: () => void;
+  selectPlan: (index: number) => void;
 }
 
 const defaultPreferences: UserPreferences = {
   relationshipStage: 'dating',
   interests: [],
   budget: 'medium',
+  planCount: 2,
 };
 
 export const usePlanStore = create<PlanState>((set, get) => ({
   preferences: defaultPreferences,
   currentPlan: null,
+  currentPlans: [],
+  selectedPlanIndex: 0,
   savedPlans: [],
   isGenerating: false,
 
@@ -53,25 +61,48 @@ export const usePlanStore = create<PlanState>((set, get) => ({
       preferences: { ...state.preferences, budget },
     })),
 
+  setPlanCount: (count) =>
+    set((state) => ({
+      preferences: { ...state.preferences, planCount: count },
+    })),
+
   generatePlan: async () => {
     set({ isGenerating: true });
     
     await new Promise((resolve) => setTimeout(resolve, 2500));
     
     const plan = generateDatePlan(get().preferences);
-    set({ currentPlan: plan, isGenerating: false });
+    set({ currentPlan: plan, currentPlans: [plan], isGenerating: false });
     return plan;
   },
 
+  generateMultiplePlans: async () => {
+    set({ isGenerating: true });
+    
+    const { planCount } = get().preferences;
+    
+    await new Promise((resolve) => setTimeout(resolve, 2500 + (planCount - 1) * 500));
+    
+    const plans = generateMultipleDatePlans(get().preferences, planCount);
+    set({ 
+      currentPlans: plans,
+      currentPlan: plans[0],
+      selectedPlanIndex: 0,
+      isGenerating: false,
+    });
+    return plans;
+  },
+
   saveCurrentPlan: () => {
-    const { currentPlan } = get();
-    if (currentPlan) {
-      savePlanToStorage(currentPlan);
+    const { currentPlans, selectedPlanIndex } = get();
+    const planToSave = currentPlans[selectedPlanIndex] || get().currentPlan;
+    if (planToSave) {
+      savePlanToStorage(planToSave);
       get().loadSavedPlans();
     }
   },
 
-  clearCurrentPlan: () => set({ currentPlan: null }),
+  clearCurrentPlan: () => set({ currentPlan: null, currentPlans: [], selectedPlanIndex: 0 }),
 
   loadSavedPlans: () => {
     set({ savedPlans: getSavedPlans() });
@@ -85,11 +116,21 @@ export const usePlanStore = create<PlanState>((set, get) => ({
   },
 
   loadPlan: (plan) => {
-    set({ currentPlan: plan });
+    set({ currentPlan: plan, currentPlans: [plan], selectedPlanIndex: 0 });
   },
 
   clearAllSavedPlans: () => {
     clearAllPlans();
     get().loadSavedPlans();
+  },
+
+  selectPlan: (index) => {
+    const { currentPlans } = get();
+    if (index >= 0 && index < currentPlans.length) {
+      set({ 
+        selectedPlanIndex: index,
+        currentPlan: currentPlans[index]
+      });
+    }
   },
 }));

@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sparkles, MapPin, ArrowRight, Calendar, Wallet, Users, Clock, Lightbulb } from 'lucide-react';
+import { Heart, Sparkles, MapPin, ArrowRight, Calendar, Wallet, Users, Clock, Lightbulb, Layers } from 'lucide-react';
 import { HeartParticles } from '../components/HeartParticles';
 import { OptionCard } from '../components/OptionCard';
 import { LoadingAnimation } from '../components/LoadingAnimation';
 import { HistoryModal } from '../components/HistoryModal';
 import { usePlanStore } from '../store/usePlanStore';
-import type { RelationshipStage, BudgetLevel } from '../types';
+import type { RelationshipStage, BudgetLevel, PlanCount } from '../types';
 
 const relationshipStages: { value: RelationshipStage; label: string; icon: string; description: string }[] = [
   { value: 'dating', label: '初识约会', icon: '🌸', description: '刚认识，正在了解彼此' },
@@ -38,14 +38,19 @@ const budgets: { value: BudgetLevel; label: string; icon: string; description: s
   { value: 'luxury', label: '豪华', icon: '👑', description: '1000元以上' },
 ];
 
+const planCounts: { value: PlanCount; label: string; icon: string; description: string }[] = [
+  { value: 2, label: '2个方案', icon: '📋', description: '生成2个方案对比选择' },
+  { value: 3, label: '3个方案', icon: '📊', description: '生成3个方案全面对比' },
+];
+
 export function HomePage() {
   const navigate = useNavigate();
-  const { preferences, setRelationshipStage, toggleInterest, setBudget, generatePlan, isGenerating, savedPlans, loadSavedPlans } = usePlanStore();
+  const { preferences, setRelationshipStage, toggleInterest, setBudget, setPlanCount, generateMultiplePlans, isGenerating, savedPlans, loadSavedPlans } = usePlanStore();
   const [step, setStep] = useState(1);
   const [showHistory, setShowHistory] = useState(false);
 
   const handleNext = () => {
-    if (step < 3) {
+    if (step < 4) {
       setStep(step + 1);
     }
   };
@@ -57,7 +62,7 @@ export function HomePage() {
   };
 
   const handleGenerate = async () => {
-    await generatePlan();
+    await generateMultiplePlans();
     navigate('/plan');
   };
 
@@ -69,6 +74,8 @@ export function HomePage() {
         return preferences.interests.length >= 3;
       case 3:
         return !!preferences.budget;
+      case 4:
+        return !!preferences.planCount;
       default:
         return false;
     }
@@ -155,7 +162,7 @@ export function HomePage() {
             className="max-w-3xl mx-auto"
           >
             <div className="flex items-center justify-center mb-12">
-              {[1, 2, 3].map((s, index) => (
+              {[1, 2, 3, 4].map((s, index) => (
                 <div key={s} className="flex items-center">
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 ${
@@ -166,9 +173,9 @@ export function HomePage() {
                   >
                     {step > s ? '✓' : s}
                   </div>
-                  {index < 2 && (
+                  {index < 3 && (
                     <div
-                      className={`w-16 md:w-24 h-1 mx-2 rounded transition-all duration-300 ${
+                      className={`w-12 md:w-20 h-1 mx-2 rounded transition-all duration-300 ${
                         step > s ? 'bg-primary' : 'bg-muted'
                       }`}
                     />
@@ -294,6 +301,61 @@ export function HomePage() {
                     </div>
                   </div>
                 )}
+
+                {step === 4 && (
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
+                        <Layers className="text-indigo-600" size={20} />
+                      </div>
+                      <div>
+                        <h2 className="text-xl font-bold">方案数量</h2>
+                        <p className="text-sm text-muted-foreground">选择要生成的方案数量，方便对比选择</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      {planCounts.map((count) => (
+                        <OptionCard
+                          key={count.value}
+                          icon={count.icon}
+                          label={count.label}
+                          description={count.description}
+                          selected={preferences.planCount === count.value}
+                          onClick={() => setPlanCount(count.value)}
+                        />
+                      ))}
+                    </div>
+
+                    <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-100 mt-8">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <Layers className="text-indigo-600" size={24} />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-foreground mb-2">多方案对比功能</h3>
+                          <p className="text-sm text-muted-foreground mb-4">
+                            选择生成多个方案后，系统将为你们同时生成 {preferences.planCount} 个不同风格的约会方案，并以并排对比的方式展示，自动高亮显示各方案之间的差异点，帮助你们快速做出最佳选择。
+                          </p>
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1.5">
+                              <Sparkles size={14} className="text-indigo-500" />
+                              <span>多样风格</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <Layers size={14} className="text-indigo-500" />
+                              <span>并排对比</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <Sparkles size={14} className="text-indigo-500" />
+                              <span>差异高亮</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </motion.div>
             </AnimatePresence>
 
@@ -310,7 +372,7 @@ export function HomePage() {
                 上一步
               </button>
 
-              {step < 3 ? (
+              {step < 4 ? (
                 <button
                   onClick={handleNext}
                   disabled={!canProceed()}
@@ -334,7 +396,7 @@ export function HomePage() {
                   }`}
                 >
                   <Sparkles size={18} />
-                  生成约会方案
+                  生成 {preferences.planCount} 个方案
                 </button>
               )}
             </div>

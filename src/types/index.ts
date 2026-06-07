@@ -6,10 +6,28 @@ export type ActivityType = 'dining' | 'activity' | 'transport' | 'surprise';
 
 export type VenueType = 'restaurant' | 'cafe' | 'attraction' | 'activity' | 'cinema';
 
+export type PlanCount = 2 | 3;
+
+export type DiffField = 'name' | 'description' | 'location' | 'cost' | 'duration' | 'time' | 'type';
+
 export interface UserPreferences {
   relationshipStage: RelationshipStage;
   interests: string[];
   budget: BudgetLevel;
+  planCount: PlanCount;
+}
+
+export interface ActivityDiff {
+  field: DiffField;
+  isDifferent: boolean;
+  values: (string | number | undefined)[];
+}
+
+export interface PlanActivityDiff {
+  activityIndex: number;
+  diffs: ActivityDiff[];
+  hasDifference: boolean;
+  activityExists: boolean[];
 }
 
 export interface Activity {

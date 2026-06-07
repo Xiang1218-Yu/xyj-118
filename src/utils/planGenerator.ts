@@ -253,6 +253,54 @@ export function deletePlanFromStorage(planId: string): void {
   }
 }
 
+export function generateMultipleDatePlans(
+  preferences: UserPreferences,
+  count: number
+): DatePlan[] {
+  const plans: DatePlan[] = [];
+  const usedVenues = new Set<string>();
+  
+  for (let i = 0; i < count; i++) {
+    let plan = generateDatePlan(preferences);
+    let attempts = 0;
+    
+    while (attempts < 10) {
+      const planVenueIds = plan.activities.map(a => a.name);
+      const overlap = planVenueIds.filter(id => usedVenues.has(id)).length;
+      
+      if (overlap <= 1 || i === 0) {
+        break;
+      }
+      
+      plan = generateDatePlan(preferences);
+      attempts++;
+    }
+    
+    plan.id = `plan-${Date.now()}-${i}`;
+    plan.title = getPlanTitleWithStyle(plan.title, i, count);
+    
+    plan.activities.forEach(a => usedVenues.add(a.name));
+    
+    plans.push(plan);
+  }
+  
+  return plans;
+}
+
+function getPlanTitleWithStyle(baseTitle: string, index: number, total: number): string {
+  const styleAdjectives = [
+    '浪漫经典',
+    '活力冒险',
+    '文艺清新',
+    '温馨舒适',
+    '奢华尊享',
+    '创意独特',
+  ];
+  
+  const adj = styleAdjectives[index % styleAdjectives.length];
+  return `${adj} · ${baseTitle.replace(/^.*·\s*/, '')}`;
+}
+
 export function clearAllPlans(): void {
   try {
     localStorage.removeItem('datePlans');
