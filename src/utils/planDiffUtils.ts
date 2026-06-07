@@ -2,6 +2,23 @@ import type { DatePlan, Activity, PlanActivityDiff, ActivityDiff, DiffField } fr
 
 const diffFields: DiffField[] = ['name', 'description', 'location', 'cost', 'duration', 'time', 'type'];
 
+type ActivityDiffField = 'name' | 'description' | 'location' | 'cost' | 'duration' | 'time' | 'type';
+
+const activityDiffFields: ActivityDiffField[] = ['name', 'description', 'location', 'cost', 'duration', 'time', 'type'];
+
+function getActivityFieldValue(activity: Activity, field: ActivityDiffField): string | number | undefined {
+  switch (field) {
+    case 'name': return activity.name;
+    case 'description': return activity.description;
+    case 'location': return activity.location;
+    case 'cost': return activity.cost;
+    case 'duration': return activity.duration;
+    case 'time': return activity.time;
+    case 'type': return activity.type;
+    default: return undefined;
+  }
+}
+
 export function comparePlans(plans: DatePlan[]): {
   activityDiffs: PlanActivityDiff[];
   summaryDiffs: {
@@ -29,14 +46,14 @@ export function comparePlans(plans: DatePlan[]): {
     const diffs: ActivityDiff[] = [];
     const activityExists = activities.map(a => a !== undefined);
 
-    for (const field of diffFields) {
+    for (const field of activityDiffFields) {
       const values = activities.map(a => {
         if (!a) return undefined;
-        return a[field as keyof Activity];
+        return getActivityFieldValue(a, field);
       });
 
       const isDifferent = checkIfDifferent(values);
-      diffs.push({ field, isDifferent, values });
+      diffs.push({ field: field as DiffField, isDifferent, values });
     }
 
     activityDiffs.push({
