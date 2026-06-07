@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 import type { UserPreferences, DatePlan, PlanCount, Activity, Surprise } from '../types';
-import { generateDatePlan, savePlanToStorage, getSavedPlans, deletePlanFromStorage, clearAllPlans, generateMultipleDatePlans } from '../utils/planGenerator';
+import { generateDatePlan, generateMultipleDatePlans } from '../services/planService';
+import { savePlanToStorage, getSavedPlans, deletePlanFromStorage, clearAllPlans } from '../modules/planStorage';
+import { calculateTotalCost } from '../utils/planUtils';
 import { useSurpriseStore } from './useSurpriseStore';
 
-const calculateEstimatedCost = (activities: Activity[]): number => {
-  return activities.reduce((sum, activity) => sum + activity.cost, 0);
-};
+const calculateEstimatedCost = calculateTotalCost;
 
 interface PlanState {
   preferences: UserPreferences;
