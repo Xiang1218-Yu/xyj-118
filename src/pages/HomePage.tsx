@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sparkles, MapPin, ArrowRight, Calendar, Wallet, Users, Clock, Lightbulb, Layers, BookOpen, AlertCircle } from '../components/Icons';
+import { Heart, Sparkles, MapPin, ArrowRight, Calendar, Wallet, Users, Clock, Lightbulb, Layers, BookOpen, AlertCircle, MessageCircleHeart } from '../components/Icons';
 import { cn } from '@/lib/utils';
 import { HeartParticles } from '../components/HeartParticles';
 import { OptionCard } from '../components/OptionCard';
@@ -137,6 +137,20 @@ export function HomePage() {
               </div>
 
               <div className="flex items-center gap-2">
+                <button
+                  onClick={() => navigate('/anniversary')}
+                  className="flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white rounded-xl border border-border hover:border-primary/30 transition-all duration-300 group"
+                >
+                  <Calendar size={18} className="text-primary" />
+                  <span className="text-sm font-medium text-foreground hidden sm:inline">纪念日</span>
+                </button>
+                <button
+                  onClick={() => navigate('/love-messages')}
+                  className="flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white rounded-xl border border-border hover:border-primary/30 transition-all duration-300 group"
+                >
+                  <MessageCircleHeart size={18} className="text-rose-500" />
+                  <span className="text-sm font-medium text-foreground hidden sm:inline">情话生成器</span>
+                </button>
                 <button
                   onClick={() => navigate('/quiz')}
                   className="flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white rounded-xl border border-border hover:border-primary/30 transition-all duration-300 group"

@@ -23,16 +23,16 @@ export default {
     extend: {
       colors: {
         primary: {
-          50: '#FFF1F5',
-          100: '#FFE4EC',
-          200: '#FFC9DA',
-          300: '#FFAEC8',
-          400: '#FF8EB1',
-          500: '#FF6B9D',
-          600: '#E85C8C',
-          700: '#D14D7B',
-          800: '#B43F69',
-          900: '#8B2635',
+          50: 'color-mix(in srgb, var(--primary-color) 8%, white)',
+          100: 'color-mix(in srgb, var(--primary-color) 15%, white)',
+          200: 'color-mix(in srgb, var(--primary-color) 30%, white)',
+          300: 'color-mix(in srgb, var(--primary-color) 45%, white)',
+          400: 'color-mix(in srgb, var(--primary-color) 60%, white)',
+          500: 'var(--primary-color)',
+          600: 'color-mix(in srgb, var(--primary-color) 85%, black)',
+          700: 'color-mix(in srgb, var(--primary-color) 70%, black)',
+          800: 'color-mix(in srgb, var(--primary-color) 55%, black)',
+          900: 'color-mix(in srgb, var(--primary-color) 40%, black)',
         },
         secondary: {
           50: '#FFFAF5',
@@ -81,8 +81,8 @@ export default {
         },
       },
       boxShadow: {
-        'soft': '0 4px 20px -2px rgba(255, 107, 157, 0.15)',
-        'glow': '0 0 30px rgba(255, 107, 157, 0.3)',
+        'soft': '0 4px 20px -2px rgba(var(--primary-rgb), 0.15)',
+        'glow': '0 0 30px rgba(var(--primary-rgb), 0.3)',
       },
       borderRadius: {
         '3xl': '1.5rem',

@@ -33,4 +33,5 @@ export {
   RefreshCw,
   Compass,
   Home,
+  MessageCircleHeart,
 } from 'lucide-react';

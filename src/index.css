@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --primary-color: #FF6B9D;
+  --primary-rgb: 255, 107, 157;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;

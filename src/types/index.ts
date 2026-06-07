@@ -163,3 +163,48 @@ export interface QuizResult {
   }[];
   analysis: string;
 }
+
+export type CalendarType = 'solar' | 'lunar';
+
+export type AnniversaryType = 'love' | 'birthday' | 'wedding' | 'other';
+
+export interface Anniversary {
+  id: string;
+  title: string;
+  date: string;
+  calendarType: CalendarType;
+  type: AnniversaryType;
+  emoji: string;
+  themeColor: string;
+  createdAt: string;
+}
+
+export type LoveMessageCategory = 
+  | 'romantic' 
+  | 'confession' 
+  | 'morning' 
+  | 'night' 
+  | 'cheesy';
+
+export interface LoveMessage {
+  id: string;
+  content: string;
+  category: LoveMessageCategory;
+  tags?: string[];
+}
+
+export interface ThemeConfig {
+  primaryColor: string;
+  name: string;
+}
+
+export const PRESET_THEMES: ThemeConfig[] = [
+  { name: '蜜桃粉', primaryColor: '#FF6B9D' },
+  { name: '天空蓝', primaryColor: '#60A5FA' },
+  { name: '薄荷绿', primaryColor: '#34D399' },
+  { name: '薰衣草紫', primaryColor: '#A78BFA' },
+  { name: '珊瑚橙', primaryColor: '#FB923C' },
+  { name: '玫瑰红', primaryColor: '#F43F5E' },
+  { name: '金色', primaryColor: '#FBBF24' },
+  { name: '星空蓝', primaryColor: '#6366F1' },
+];
