@@ -15,6 +15,7 @@ export interface UserPreferences {
   interests: string[];
   budget: BudgetLevel;
   planCount: PlanCount;
+  useFavoriteSurprises: boolean;
 }
 
 export interface ActivityDiff {
@@ -80,6 +81,12 @@ export interface Surprise {
   content: string;
   suitableFor: RelationshipStage[];
   budget: BudgetLevel[];
+}
+
+export interface CollectedSurprise extends Surprise {
+  isFavorite: boolean;
+  createdAt: string;
+  source: 'system' | 'user';
 }
 
 export interface ActivityTemplate {

@@ -185,8 +185,24 @@ function generateActivities(
   return activities;
 }
 
-function selectSurprises(preferences: UserPreferences): string[] {
-  const { relationshipStage, budget } = preferences;
+function selectSurprises(
+  preferences: UserPreferences, 
+  favoriteSurprises?: Surprise[]
+): string[] {
+  const { relationshipStage, budget, useFavoriteSurprises } = preferences;
+  
+  if (useFavoriteSurprises && favoriteSurprises && favoriteSurprises.length > 0) {
+    const filteredFavorites = favoriteSurprises.filter(s => 
+      s.suitableFor.includes(relationshipStage) && 
+      s.budget.includes(budget)
+    );
+    
+    if (filteredFavorites.length > 0) {
+      const shuffled = shuffleArray(filteredFavorites);
+      const count = Math.min(2, shuffled.length);
+      return shuffled.slice(0, count).map(s => s.content);
+    }
+  }
   
   const suitableSurprises = surprises.filter(s => 
     s.suitableFor.includes(relationshipStage) && 
@@ -203,11 +219,11 @@ function calculateTotalCost(activities: Activity[]): number {
   return activities.reduce((sum, act) => sum + act.cost, 0);
 }
 
-export function generateDatePlan(preferences: UserPreferences): DatePlan {
+export function generateDatePlan(preferences: UserPreferences, favoriteSurprises?: Surprise[]): DatePlan {
   const filteredVenues = filterVenuesByPreferences(preferences);
   const { lunch, dinner, activities: activityVenues } = selectVenues(filteredVenues, preferences.budget);
   const activities = generateActivities(lunch, dinner, activityVenues, preferences.budget);
-  const selectedSurprises = selectSurprises(preferences);
+  const selectedSurprises = selectSurprises(preferences, favoriteSurprises);
   const estimatedCost = calculateTotalCost(activities);
   
   return {
@@ -255,13 +271,14 @@ export function deletePlanFromStorage(planId: string): void {
 
 export function generateMultipleDatePlans(
   preferences: UserPreferences,
-  count: number
+  count: number,
+  favoriteSurprises?: Surprise[]
 ): DatePlan[] {
   const plans: DatePlan[] = [];
   const usedVenues = new Set<string>();
   
   for (let i = 0; i < count; i++) {
-    let plan = generateDatePlan(preferences);
+    let plan = generateDatePlan(preferences, favoriteSurprises);
     let attempts = 0;
     
     while (attempts < 10) {
@@ -272,7 +289,7 @@ export function generateMultipleDatePlans(
         break;
       }
       
-      plan = generateDatePlan(preferences);
+      plan = generateDatePlan(preferences, favoriteSurprises);
       attempts++;
     }
     

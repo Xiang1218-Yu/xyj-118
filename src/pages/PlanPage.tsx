@@ -1,17 +1,20 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, Reorder } from 'framer-motion';
-import { ArrowLeft, Save, RotateCcw, Share2, Cloud, Heart, Sparkles, Clock, Layers, Eye, Highlighter, Check, AlertCircle, Edit3, GripVertical } from 'lucide-react';
+import { ArrowLeft, Save, RotateCcw, Share2, Cloud, Heart, Sparkles, Clock, Layers, Eye, Highlighter, Check, AlertCircle, Edit3, GripVertical, BookOpen } from 'lucide-react';
 import { HeartParticles } from '../components/HeartParticles';
 import { TimelineItem } from '../components/TimelineItem';
 import { SurpriseBox } from '../components/SurpriseBox';
 import { LoadingAnimation } from '../components/LoadingAnimation';
 import { HistoryModal } from '../components/HistoryModal';
 import { EditActivityModal } from '../components/EditActivityModal';
+import { SurpriseLibraryModal } from '../components/SurpriseLibraryModal';
 import { usePlanStore } from '../store/usePlanStore';
+import { useSurpriseStore } from '../store/useSurpriseStore';
 import { comparePlans, getDifferentFields } from '../utils/planDiffUtils';
 import { cn } from '@/lib/utils';
-import type { DiffField, Activity } from '../types';
+import type { DiffField, Activity, Surprise } from '../types';
+import surprisesData from '../data/surprises.json';
 
 const planColors = [
   { primary: 'from-rose-500 to-pink-500', bg: 'bg-rose-50', border: 'border-rose-200', ring: 'ring-rose-400' },
@@ -29,6 +32,8 @@ const diffLegend: { field: DiffField; color: string; label: string }[] = [
   { field: 'type', color: 'bg-orange-400', label: '类型' },
 ];
 
+const allSurprises = surprisesData as Surprise[];
+
 export function PlanPage() {
   const navigate = useNavigate();
   const [showHistory, setShowHistory] = useState(false);
@@ -37,6 +42,7 @@ export function PlanPage() {
   const [editMode, setEditMode] = useState(false);
   const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showSurpriseLibrary, setShowSurpriseLibrary] = useState(false);
   const { 
     currentPlan, 
     currentPlans, 
@@ -52,6 +58,15 @@ export function PlanPage() {
     reorderActivities,
     updateActivity,
   } = usePlanStore();
+  const { collectedSurprises, loadCollectedSurprises } = useSurpriseStore();
+
+  useEffect(() => {
+    loadCollectedSurprises();
+  }, [loadCollectedSurprises]);
+
+  const getSurpriseByContent = (content: string): Surprise | undefined => {
+    return allSurprises.find(s => s.content === content);
+  };
 
   const hasMultiplePlans = currentPlans.length > 1;
 
@@ -98,7 +113,7 @@ export function PlanPage() {
           text: `我们的约会方案：${planToShare.title}，预算${planToShare.totalBudget}`,
           url: window.location.href,
         });
-      } catch (err) {
+      } catch (_err) {
         console.log('分享取消');
       }
     } else {
@@ -130,6 +145,7 @@ export function PlanPage() {
     <div className="min-h-screen relative">
       <HeartParticles />
       <HistoryModal isOpen={showHistory} onClose={() => setShowHistory(false)} />
+      <SurpriseLibraryModal isOpen={showSurpriseLibrary} onClose={() => setShowSurpriseLibrary(false)} />
       <EditActivityModal
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
@@ -388,7 +404,7 @@ export function PlanPage() {
                           "grid gap-4",
                           currentPlans.length === 2 ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1 lg:grid-cols-3"
                         )}>
-                          {currentPlans.map((plan, planIndex) => {
+                          {currentPlans.map((plan, _planIndex) => {
                             const activity = plan.activities[globalIndex];
                             if (!activity) {
                               return (
@@ -563,18 +579,43 @@ export function PlanPage() {
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
-                  className="flex items-center gap-3 mb-8"
+                  className="flex items-center justify-between mb-8"
                 >
-                  <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                    <Sparkles className="text-amber-500" size={20} />
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                      <Sparkles className="text-amber-500" size={20} />
+                    </div>
+                    <h2 className="text-2xl font-bold">惊喜彩蛋</h2>
                   </div>
-                  <h2 className="text-2xl font-bold">惊喜彩蛋</h2>
+                  <button
+                    onClick={() => {
+                      loadCollectedSurprises();
+                      setShowSurpriseLibrary(true);
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white rounded-xl border border-border hover:border-amber-300 transition-all duration-300"
+                  >
+                    <BookOpen size={16} className="text-amber-500" />
+                    <span className="text-sm font-medium">彩蛋库</span>
+                    {collectedSurprises.length > 0 && (
+                      <span className="px-1.5 h-4 min-w-[16px] flex items-center justify-center bg-amber-500 text-white text-xs font-bold rounded-full">
+                        {collectedSurprises.length}
+                      </span>
+                    )}
+                  </button>
                 </motion.div>
 
                 <div className="grid md:grid-cols-2 gap-6">
-                  {activePlan.surprises.map((surprise, index) => (
-                    <SurpriseBox key={index} content={surprise} index={index} />
-                  ))}
+                  {activePlan.surprises.map((surpriseContent, index) => {
+                    const surprise = getSurpriseByContent(surpriseContent);
+                    return (
+                      <SurpriseBox 
+                        key={index} 
+                        content={surpriseContent} 
+                        index={index} 
+                        surprise={surprise}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             </section>

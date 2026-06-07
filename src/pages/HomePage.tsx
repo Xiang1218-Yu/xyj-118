@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sparkles, MapPin, ArrowRight, Calendar, Wallet, Users, Clock, Lightbulb, Layers } from 'lucide-react';
+import { Heart, Sparkles, MapPin, ArrowRight, Calendar, Wallet, Users, Clock, Lightbulb, Layers, BookOpen, AlertCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { HeartParticles } from '../components/HeartParticles';
 import { OptionCard } from '../components/OptionCard';
 import { LoadingAnimation } from '../components/LoadingAnimation';
 import { HistoryModal } from '../components/HistoryModal';
+import { SurpriseLibraryModal } from '../components/SurpriseLibraryModal';
 import { usePlanStore } from '../store/usePlanStore';
+import { useSurpriseStore } from '../store/useSurpriseStore';
 import type { RelationshipStage, BudgetLevel, PlanCount } from '../types';
 
 const relationshipStages: { value: RelationshipStage; label: string; icon: string; description: string }[] = [
@@ -45,9 +48,20 @@ const planCounts: { value: PlanCount; label: string; icon: string; description: 
 
 export function HomePage() {
   const navigate = useNavigate();
-  const { preferences, setRelationshipStage, toggleInterest, setBudget, setPlanCount, generateMultiplePlans, isGenerating, savedPlans, loadSavedPlans } = usePlanStore();
+  const { preferences, setRelationshipStage, toggleInterest, setBudget, setPlanCount, setUseFavoriteSurprises, generateMultiplePlans, isGenerating, savedPlans, loadSavedPlans } = usePlanStore();
+  const { collectedSurprises, loadCollectedSurprises, getFavoriteSurprises } = useSurpriseStore();
   const [step, setStep] = useState(1);
   const [showHistory, setShowHistory] = useState(false);
+  const [showSurpriseLibrary, setShowSurpriseLibrary] = useState(false);
+
+  useEffect(() => {
+    loadCollectedSurprises();
+  }, [loadCollectedSurprises]);
+
+  const favoriteCount = getFavoriteSurprises({
+    relationshipStage: preferences.relationshipStage,
+    budget: preferences.budget,
+  }).length;
 
   const handleNext = () => {
     if (step < 4) {
@@ -89,6 +103,7 @@ export function HomePage() {
     <div className="min-h-screen relative overflow-hidden">
       <HeartParticles />
       <HistoryModal isOpen={showHistory} onClose={() => setShowHistory(false)} />
+      <SurpriseLibraryModal isOpen={showSurpriseLibrary} onClose={() => setShowSurpriseLibrary(false)} />
 
       <div className="relative z-10">
         <motion.header
@@ -114,7 +129,22 @@ export function HomePage() {
                   className="flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white rounded-xl border border-border hover:border-primary/30 transition-all duration-300 group"
                 >
                   <Lightbulb size={18} className="text-primary" />
-                  <span className="text-sm font-medium text-foreground">灵感社区</span>
+                  <span className="text-sm font-medium text-foreground hidden sm:inline">灵感社区</span>
+                </button>
+                <button
+                  onClick={() => {
+                    loadCollectedSurprises();
+                    setShowSurpriseLibrary(true);
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white rounded-xl border border-border hover:border-primary/30 transition-all duration-300"
+                >
+                  <Sparkles size={18} className="text-amber-500" />
+                  <span className="text-sm font-medium text-foreground hidden sm:inline">彩蛋库</span>
+                  {collectedSurprises.length > 0 && (
+                    <span className="px-1.5 h-4 min-w-[16px] flex items-center justify-center bg-amber-500 text-white text-xs font-bold rounded-full">
+                      {collectedSurprises.length}
+                    </span>
+                  )}
                 </button>
                 <button
                   onClick={() => {
@@ -327,7 +357,59 @@ export function HomePage() {
                       ))}
                     </div>
 
-                    <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-100 mt-8">
+                    <div className="bg-gradient-to-r from-amber-50 to-rose-50 rounded-2xl p-5 border border-amber-200">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-rose-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <Sparkles className="text-white" size={24} />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <h3 className="font-semibold text-foreground">使用收藏的彩蛋</h3>
+                            <button
+                              onClick={() => setUseFavoriteSurprises(!preferences.useFavoriteSurprises)}
+                              className={cn(
+                                "relative w-12 h-6 rounded-full transition-colors duration-300",
+                                preferences.useFavoriteSurprises ? "bg-gradient-to-r from-amber-500 to-rose-500" : "bg-gray-300"
+                              )}
+                            >
+                              <motion.div
+                                animate={{ x: preferences.useFavoriteSurprises ? 26 : 2 }}
+                                transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                                className="absolute top-1 w-4 h-4 bg-white rounded-full shadow-md"
+                              />
+                            </button>
+                          </div>
+                          <p className="text-sm text-muted-foreground mb-3">
+                            开启后，方案中的惊喜彩蛋将从你收藏的彩蛋库中随机选取
+                          </p>
+                          <div className="flex items-center gap-4 text-sm">
+                            <div className="flex items-center gap-1.5 text-amber-600">
+                              <BookOpen size={14} />
+                              <span>可用彩蛋 {favoriteCount} 个</span>
+                            </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                loadCollectedSurprises();
+                                setShowSurpriseLibrary(true);
+                              }}
+                              className="flex items-center gap-1.5 text-primary hover:underline"
+                            >
+                              <Sparkles size={14} />
+                              <span>管理彩蛋库</span>
+                            </button>
+                          </div>
+                          {preferences.useFavoriteSurprises && favoriteCount === 0 && (
+                            <p className="text-xs text-rose-500 mt-2 flex items-center gap-1">
+                              <AlertCircle size={12} />
+                              暂无符合当前条件的收藏彩蛋，将使用系统推荐
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-100 mt-2">
                       <div className="flex items-start gap-4">
                         <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
                           <Layers className="text-indigo-600" size={24} />

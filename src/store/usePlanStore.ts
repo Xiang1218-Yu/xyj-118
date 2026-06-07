@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import type { UserPreferences, DatePlan, PlanCount, Activity } from '../types';
+import type { UserPreferences, DatePlan, PlanCount, Activity, Surprise } from '../types';
 import { generateDatePlan, savePlanToStorage, getSavedPlans, deletePlanFromStorage, clearAllPlans, generateMultipleDatePlans } from '../utils/planGenerator';
+import { useSurpriseStore } from './useSurpriseStore';
 
 const calculateEstimatedCost = (activities: Activity[]): number => {
   return activities.reduce((sum, activity) => sum + activity.cost, 0);
@@ -17,6 +18,7 @@ interface PlanState {
   toggleInterest: (interest: string) => void;
   setBudget: (budget: UserPreferences['budget']) => void;
   setPlanCount: (count: PlanCount) => void;
+  setUseFavoriteSurprises: (use: boolean) => void;
   generatePlan: () => Promise<DatePlan>;
   generateMultiplePlans: () => Promise<DatePlan[]>;
   saveCurrentPlan: () => void;
@@ -36,6 +38,7 @@ const defaultPreferences: UserPreferences = {
   interests: [],
   budget: 'medium',
   planCount: 2,
+  useFavoriteSurprises: false,
 };
 
 export const usePlanStore = create<PlanState>((set, get) => ({
@@ -72,12 +75,28 @@ export const usePlanStore = create<PlanState>((set, get) => ({
       preferences: { ...state.preferences, planCount: count },
     })),
 
+  setUseFavoriteSurprises: (use) =>
+    set((state) => ({
+      preferences: { ...state.preferences, useFavoriteSurprises: use },
+    })),
+
   generatePlan: async () => {
     set({ isGenerating: true });
     
     await new Promise((resolve) => setTimeout(resolve, 2500));
     
-    const plan = generateDatePlan(get().preferences);
+    const { preferences } = get();
+    let favoriteSurprises: Surprise[] | undefined;
+    
+    if (preferences.useFavoriteSurprises) {
+      const surpriseStore = useSurpriseStore.getState();
+      favoriteSurprises = surpriseStore.getFavoriteSurprises({
+        relationshipStage: preferences.relationshipStage,
+        budget: preferences.budget,
+      }) as Surprise[];
+    }
+    
+    const plan = generateDatePlan(preferences, favoriteSurprises);
     set({ currentPlan: plan, currentPlans: [plan], isGenerating: false });
     return plan;
   },
@@ -85,11 +104,20 @@ export const usePlanStore = create<PlanState>((set, get) => ({
   generateMultiplePlans: async () => {
     set({ isGenerating: true });
     
-    const { planCount } = get().preferences;
+    const { preferences } = get();
+    let favoriteSurprises: Surprise[] | undefined;
     
-    await new Promise((resolve) => setTimeout(resolve, 2500 + (planCount - 1) * 500));
+    if (preferences.useFavoriteSurprises) {
+      const surpriseStore = useSurpriseStore.getState();
+      favoriteSurprises = surpriseStore.getFavoriteSurprises({
+        relationshipStage: preferences.relationshipStage,
+        budget: preferences.budget,
+      }) as Surprise[];
+    }
     
-    const plans = generateMultipleDatePlans(get().preferences, planCount);
+    await new Promise((resolve) => setTimeout(resolve, 2500 + (preferences.planCount - 1) * 500));
+    
+    const plans = generateMultipleDatePlans(preferences, preferences.planCount, favoriteSurprises);
     set({ 
       currentPlans: plans,
       currentPlan: plans[0],
