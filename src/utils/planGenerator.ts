@@ -242,3 +242,21 @@ export function getSavedPlans(): DatePlan[] {
     return [];
   }
 }
+
+export function deletePlanFromStorage(planId: string): void {
+  try {
+    const savedPlans = JSON.parse(localStorage.getItem('datePlans') || '[]');
+    const filteredPlans = savedPlans.filter((p: DatePlan) => p.id !== planId);
+    localStorage.setItem('datePlans', JSON.stringify(filteredPlans));
+  } catch (e) {
+    console.error('Failed to delete plan:', e);
+  }
+}
+
+export function clearAllPlans(): void {
+  try {
+    localStorage.removeItem('datePlans');
+  } catch (e) {
+    console.error('Failed to clear plans:', e);
+  }
+}

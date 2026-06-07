@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Sparkles, MapPin, ArrowRight, Calendar, Wallet, Users } from 'lucide-react';
+import { Heart, Sparkles, MapPin, ArrowRight, Calendar, Wallet, Users, Clock } from 'lucide-react';
 import { HeartParticles } from '../components/HeartParticles';
 import { OptionCard } from '../components/OptionCard';
 import { LoadingAnimation } from '../components/LoadingAnimation';
+import { HistoryModal } from '../components/HistoryModal';
 import { usePlanStore } from '../store/usePlanStore';
 import type { RelationshipStage, BudgetLevel } from '../types';
 
@@ -40,7 +42,8 @@ const steps = [
 
 export function HomePage() {
   const navigate = useNavigate();
-  const { preferences, isGenerating, setRelationshipStage, toggleInterest, setBudget, generatePlan } = usePlanStore();
+  const [showHistory, setShowHistory] = useState(false);
+  const { preferences, isGenerating, savedPlans, loadSavedPlans, setRelationshipStage, toggleInterest, setBudget, generatePlan } = usePlanStore();
 
   const handleGenerate = async () => {
     await generatePlan();
@@ -56,9 +59,36 @@ export function HomePage() {
   return (
     <div className="min-h-screen relative">
       <HeartParticles />
+      <HistoryModal isOpen={showHistory} onClose={() => setShowHistory(false)} />
 
       <div className="relative z-10">
-        <section className="pt-20 pb-16 px-4">
+        <header className="sticky top-0 z-20 backdrop-blur-md bg-background/80 border-b border-border/50">
+          <div className="container max-w-5xl px-4 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">💕</span>
+                <span className="font-display font-bold text-xl gradient-text">今天去哪儿玩</span>
+              </div>
+              <button
+                onClick={() => {
+                  loadSavedPlans();
+                  setShowHistory(true);
+                }}
+                className="flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white rounded-xl border border-border hover:border-primary/30 transition-all duration-300 group"
+              >
+                <Clock size={18} className="text-primary" />
+                <span className="text-sm font-medium text-foreground">历史方案</span>
+                {savedPlans.length > 0 && (
+                  <span className="px-1.5 h-5 min-w-[20px] flex items-center justify-center bg-primary text-white text-xs font-bold rounded-full">
+                    {savedPlans.length}
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <section className="pt-12 pb-16 px-4">
           <div className="container max-w-5xl">
             <motion.div
               initial={{ opacity: 0, y: 30 }}

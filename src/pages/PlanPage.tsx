@@ -1,15 +1,18 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Save, RotateCcw, Share2, Cloud, Heart, Sparkles } from 'lucide-react';
+import { ArrowLeft, Save, RotateCcw, Share2, Cloud, Heart, Sparkles, Clock } from 'lucide-react';
 import { HeartParticles } from '../components/HeartParticles';
 import { TimelineItem } from '../components/TimelineItem';
 import { SurpriseBox } from '../components/SurpriseBox';
 import { LoadingAnimation } from '../components/LoadingAnimation';
+import { HistoryModal } from '../components/HistoryModal';
 import { usePlanStore } from '../store/usePlanStore';
 
 export function PlanPage() {
   const navigate = useNavigate();
-  const { currentPlan, isGenerating, generatePlan, saveCurrentPlan, resetPreferences, clearCurrentPlan } = usePlanStore();
+  const [showHistory, setShowHistory] = useState(false);
+  const { currentPlan, isGenerating, savedPlans, loadSavedPlans, generatePlan, saveCurrentPlan, resetPreferences, clearCurrentPlan } = usePlanStore();
 
   const handleRegenerate = async () => {
     await generatePlan();
@@ -64,6 +67,7 @@ export function PlanPage() {
   return (
     <div className="min-h-screen relative">
       <HeartParticles />
+      <HistoryModal isOpen={showHistory} onClose={() => setShowHistory(false)} />
 
       <div className="relative z-10">
         <motion.header
@@ -82,6 +86,21 @@ export function PlanPage() {
               </button>
 
               <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    loadSavedPlans();
+                    setShowHistory(true);
+                  }}
+                  className="btn-secondary flex items-center gap-2"
+                >
+                  <Clock size={16} />
+                  <span className="hidden sm:inline">历史</span>
+                  {savedPlans.length > 0 && (
+                    <span className="px-1.5 h-4 min-w-[16px] flex items-center justify-center bg-primary text-white text-xs font-bold rounded-full">
+                      {savedPlans.length}
+                    </span>
+                  )}
+                </button>
                 <button
                   onClick={handleSave}
                   className="btn-secondary flex items-center gap-2"

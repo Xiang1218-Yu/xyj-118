@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { UserPreferences, DatePlan } from '../types';
-import { generateDatePlan, savePlanToStorage, getSavedPlans } from '../utils/planGenerator';
+import { generateDatePlan, savePlanToStorage, getSavedPlans, deletePlanFromStorage, clearAllPlans } from '../utils/planGenerator';
 
 interface PlanState {
   preferences: UserPreferences;
@@ -15,6 +15,9 @@ interface PlanState {
   clearCurrentPlan: () => void;
   loadSavedPlans: () => void;
   resetPreferences: () => void;
+  deleteSavedPlan: (planId: string) => void;
+  loadPlan: (plan: DatePlan) => void;
+  clearAllSavedPlans: () => void;
 }
 
 const defaultPreferences: UserPreferences = {
@@ -75,4 +78,18 @@ export const usePlanStore = create<PlanState>((set, get) => ({
   },
 
   resetPreferences: () => set({ preferences: defaultPreferences }),
+
+  deleteSavedPlan: (planId) => {
+    deletePlanFromStorage(planId);
+    get().loadSavedPlans();
+  },
+
+  loadPlan: (plan) => {
+    set({ currentPlan: plan });
+  },
+
+  clearAllSavedPlans: () => {
+    clearAllPlans();
+    get().loadSavedPlans();
+  },
 }));
