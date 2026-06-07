@@ -19,16 +19,19 @@ interface IdeaState {
 
 function loadFromStorage(): Idea[] {
   try {
+    const likedIds = JSON.parse(localStorage.getItem(LIKED_KEY) || '[]') as string[];
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       const storedIdeas = JSON.parse(stored) as Idea[];
-      const likedIds = JSON.parse(localStorage.getItem(LIKED_KEY) || '[]') as string[];
       return storedIdeas.map(idea => ({
         ...idea,
         isLiked: likedIds.includes(idea.id),
       }));
     }
-    return initialIdeas as Idea[];
+    return (initialIdeas as Idea[]).map(idea => ({
+      ...idea,
+      isLiked: likedIds.includes(idea.id),
+    }));
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_e) {
     return initialIdeas as Idea[];
@@ -107,10 +110,11 @@ export const useIdeaStore = create<IdeaState>((set, get) => ({
         return idea;
       });
 
-      const likedIds = getLikedIds();
-      const newLikedIds = likedIds.includes(ideaId)
-        ? likedIds.filter((id) => id !== ideaId)
-        : [...likedIds, ideaId];
+      const currentLikedIds = state.ideas.filter(i => i.isLiked).map(i => i.id);
+      const targetIdea = state.ideas.find(i => i.id === ideaId);
+      const newLikedIds = targetIdea?.isLiked 
+        ? currentLikedIds.filter((id) => id !== ideaId)
+        : [...currentLikedIds, ideaId];
 
       saveToStorage(newIdeas);
       saveLikedToStorage(newLikedIds);

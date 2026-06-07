@@ -170,7 +170,7 @@ export function IdeaForm({ onClose }: IdeaFormProps) {
                     className={cn(
                       'px-3 py-1.5 rounded-full text-sm transition-all duration-200',
                       tags.includes(tag)
-                        ? 'bg-primary text-white'
+                        ? 'bg-primary text-black'
                         : 'bg-secondary/50 text-secondary-foreground hover:bg-secondary/70'
                     )}
                   >
@@ -244,7 +244,7 @@ export function IdeaForm({ onClose }: IdeaFormProps) {
                 'flex-1 py-3 px-6 rounded-xl font-medium transition-all duration-300',
                 'flex items-center justify-center gap-2',
                 isValid && !isSubmitting
-                  ? 'bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40'
+                  ? 'bg-primary text-black hover:bg-primary/90 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40'
                   : 'bg-muted text-muted-foreground cursor-not-allowed'
               )}
             >

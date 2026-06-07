@@ -27,8 +27,12 @@ const categoryEmojis: Record<string, string> = {
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
   const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  
+  const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const nowOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  
+  const diffMs = nowOnly.getTime() - dateOnly.getTime();
+  const diffDays = Math.max(0, Math.round(diffMs / (1000 * 60 * 60 * 24)));
   
   if (diffDays === 0) return '今天';
   if (diffDays === 1) return '昨天';
@@ -98,7 +102,8 @@ export function IdeaCard({ idea, index }: IdeaCardProps) {
             )}
           >
             <motion.div
-              animate={idea.isLiked ? { scale: [1, 1.3, 1] } : {}}
+              key={idea.id + '-' + idea.isLiked}
+              animate={idea.isLiked ? { scale: [1, 1.3, 1] } : { scale: 1 }}
               transition={{ duration: 0.3 }}
             >
               <Heart
