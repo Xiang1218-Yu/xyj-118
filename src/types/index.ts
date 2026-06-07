@@ -74,3 +74,28 @@ export interface ActivityTemplate {
   suitableFor: string[];
   minBudget: BudgetLevel;
 }
+
+export type IdeaCategory = 
+  | '美食' 
+  | '电影' 
+  | '户外' 
+  | '文艺' 
+  | '运动' 
+  | '探店' 
+  | '手作' 
+  | '拍照' 
+  | '游戏' 
+  | '旅行' 
+  | '居家' 
+  | '其他';
+
+export interface Idea {
+  id: string;
+  title: string;
+  content: string;
+  category: IdeaCategory;
+  tags: string[];
+  likes: number;
+  createdAt: string;
+  isLiked: boolean;
+}
