@@ -1,0 +1,152 @@
+[
+  {
+    "id": "a1",
+    "type": "dining",
+    "name": "浪漫午餐",
+    "duration": "1.5小时",
+    "description": "在温馨的餐厅享用一顿精致的午餐",
+    "category": "美食",
+    "suitableFor": ["dating", "passionate", "stable", "longterm"],
+    "minBudget": "low"
+  },
+  {
+    "id": "a2",
+    "type": "dining",
+    "name": "烛光晚餐",
+    "duration": "2小时",
+    "description": "在优雅的氛围中共进晚餐",
+    "category": "美食",
+    "suitableFor": ["passionate", "stable", "longterm"],
+    "minBudget": "medium"
+  },
+  {
+    "id": "a3",
+    "type": "activity",
+    "name": "看一场电影",
+    "duration": "2小时",
+    "description": "选择一部近期上映的好片，共享观影时光",
+    "category": "电影",
+    "suitableFor": ["dating", "passionate", "stable", "longterm"],
+    "minBudget": "low"
+  },
+  {
+    "id": "a4",
+    "type": "activity",
+    "name": "逛艺术展",
+    "duration": "2小时",
+    "description": "一起欣赏艺术作品，交流彼此的感受",
+    "category": "文艺",
+    "suitableFor": ["dating", "passionate", "stable"],
+    "minBudget": "low"
+  },
+  {
+    "id": "a5",
+    "type": "activity",
+    "name": "城市漫游",
+    "duration": "1.5小时",
+    "description": "漫无目的地走在陌生的街道，发现城市的小美好",
+    "category": "户外",
+    "suitableFor": ["dating", "passionate", "stable", "longterm"],
+    "minBudget": "low"
+  },
+  {
+    "id": "a6",
+    "type": "activity",
+    "name": "咖啡馆小憩",
+    "duration": "1小时",
+    "description": "在安静的咖啡馆聊天、看书、看人来人往",
+    "category": "探店",
+    "suitableFor": ["dating", "passionate", "stable", "longterm"],
+    "minBudget": "low"
+  },
+  {
+    "id": "a7",
+    "type": "activity",
+    "name": "陶艺手作",
+    "duration": "2.5小时",
+    "description": "一起动手做陶艺，创造属于你们的纪念品",
+    "category": "手作",
+    "suitableFor": ["dating", "passionate", "stable"],
+    "minBudget": "medium"
+  },
+  {
+    "id": "a8",
+    "type": "activity",
+    "name": "烘焙体验",
+    "duration": "2小时",
+    "description": "一起做蛋糕或饼干，甜蜜又有趣",
+    "category": "手作",
+    "suitableFor": ["dating", "passionate", "stable"],
+    "minBudget": "medium"
+  },
+  {
+    "id": "a9",
+    "type": "activity",
+    "name": "骑行探索",
+    "duration": "2小时",
+    "description": "骑着自行车，发现城市里隐藏的美好角落",
+    "category": "运动",
+    "suitableFor": ["dating", "passionate", "stable", "longterm"],
+    "minBudget": "low"
+  },
+  {
+    "id": "a10",
+    "type": "activity",
+    "name": "逛公园",
+    "duration": "1.5小时",
+    "description": "在公园里散步、野餐、晒太阳",
+    "category": "户外",
+    "suitableFor": ["stable", "longterm"],
+    "minBudget": "low"
+  },
+  {
+    "id": "a11",
+    "type": "activity",
+    "name": "花艺课堂",
+    "duration": "2小时",
+    "description": "一起学习插花，把作品带回家",
+    "category": "手作",
+    "suitableFor": ["dating", "passionate", "stable"],
+    "minBudget": "high"
+  },
+  {
+    "id": "a12",
+    "type": "activity",
+    "name": "拍照打卡",
+    "duration": "1.5小时",
+    "description": "去网红打卡点，用镜头记录美好时光",
+    "category": "拍照",
+    "suitableFor": ["dating", "passionate", "stable"],
+    "minBudget": "low"
+  },
+  {
+    "id": "a13",
+    "type": "activity",
+    "name": "海洋馆游玩",
+    "duration": "3小时",
+    "description": "在梦幻的海洋世界里找回童心",
+    "category": "户外",
+    "suitableFor": ["dating", "passionate", "stable"],
+    "minBudget": "high"
+  },
+  {
+    "id": "a14",
+    "type": "activity",
+    "name": "城市露营",
+    "duration": "4小时",
+    "description": "在城市里体验露营的乐趣，看星空看夜景",
+    "category": "户外",
+    "suitableFor": ["passionate", "stable", "longterm"],
+    "minBudget": "high"
+  },
+  {
+    "id": "a15",
+    "type": "dining",
+    "name": "深夜居酒屋",
+    "duration": "2小时",
+    "description": "在温馨的居酒屋小酌几杯，畅聊人生",
+    "category": "美食",
+    "suitableFor": ["stable", "longterm"],
+    "minBudget": "medium"
+  }
+]

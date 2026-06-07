@@ -1,0 +1,74 @@
+[
+  {
+    "id": "s1",
+    "content": "在餐厅悄悄让服务员送上一束她最爱的玫瑰花，卡片上写着：「今天和你在一起的每一分钟，都很珍贵」",
+    "suitableFor": ["dating", "passionate"],
+    "budget": ["medium", "high", "luxury"]
+  },
+  {
+    "id": "s2",
+    "content": "提前准备好两人的合照，做成定制钥匙扣，在散步时不经意地拿出来送给对方",
+    "suitableFor": ["dating", "passionate", "stable"],
+    "budget": ["low", "medium", "high", "luxury"]
+  },
+  {
+    "id": "s3",
+    "content": "在看电影时，趁黑暗中悄悄牵起对方的手，然后在手心写下「我喜欢你」",
+    "suitableFor": ["dating", "passionate"],
+    "budget": ["low", "medium", "high", "luxury"]
+  },
+  {
+    "id": "s4",
+    "content": "预定一家带露台的餐厅，用餐后一起看夜景时，从背后轻轻抱住对方说：「谢谢你愿意陪我」",
+    "suitableFor": ["passionate", "stable", "longterm"],
+    "budget": ["medium", "high", "luxury"]
+  },
+  {
+    "id": "s5",
+    "content": "在陶艺体验时，悄悄在你们共同制作的杯子底部刻上两个人名字的缩写",
+    "suitableFor": ["dating", "passionate", "stable"],
+    "budget": ["medium", "high", "luxury"]
+  },
+  {
+    "id": "s6",
+    "content": "带对方去你们第一次见面的地方（或附近），说：「还记得那天吗？从那天起，我的生活变得不一样了」",
+    "suitableFor": ["stable", "longterm"],
+    "budget": ["low", "medium", "high", "luxury"]
+  },
+  {
+    "id": "s7",
+    "content": "买一盒对方小时候爱吃的零食，笑着说：「我想参与你的过去，也想拥有你的未来」",
+    "suitableFor": ["passionate", "stable", "longterm"],
+    "budget": ["low", "medium", "high", "luxury"]
+  },
+  {
+    "id": "s8",
+    "content": "在咖啡馆时，假装去洗手间，实际上是去给对方点一杯他最爱的饮品，端回来时说：「我记住了你的喜好」",
+    "suitableFor": ["dating", "passionate"],
+    "budget": ["low", "medium", "high", "luxury"]
+  },
+  {
+    "id": "s9",
+    "content": "一起写一张给未来的信，约定一年后的今天再一起打开，看看那时的你们是否还在一起",
+    "suitableFor": ["stable", "longterm"],
+    "budget": ["low", "medium", "high", "luxury"]
+  },
+  {
+    "id": "s10",
+    "content": "在海边/江边散步时，捡一块漂亮的石头送给对方，说：「这是我们今天约会的纪念」",
+    "suitableFor": ["dating", "passionate", "stable"],
+    "budget": ["low", "medium", "high", "luxury"]
+  },
+  {
+    "id": "s11",
+    "content": "提前录好一段想对对方说的话，在合适的时候戴耳机一起听，听完后给对方一个拥抱",
+    "suitableFor": ["passionate", "stable", "longterm"],
+    "budget": ["low", "medium", "high", "luxury"]
+  },
+  {
+    "id": "s12",
+    "content": "在烘焙时，在蛋糕上用巧克力写下「在一起的第N天」，N是你们实际在一起的天数",
+    "suitableFor": ["passionate", "stable", "longterm"],
+    "budget": ["medium", "high", "luxury"]
+  }
+]
