@@ -1,8 +1,8 @@
-import { motion } from "framer-motion";
-import { Heart, Calendar, Tag } from "lucide-react";
-import type { Idea } from "../types";
-import { cn } from "@/lib/utils";
-import { useIdeaStore } from "../store/useIdeaStore";
+import { motion } from 'framer-motion';
+import { Heart, Calendar, Tag } from 'lucide-react';
+import type { Idea } from '../types';
+import { cn } from '@/lib/utils';
+import { useIdeaStore } from '../store/useIdeaStore';
 
 interface IdeaCardProps {
   idea: Idea;
@@ -10,18 +10,18 @@ interface IdeaCardProps {
 }
 
 const categoryEmojis: Record<string, string> = {
-  "美食": "🍜",
-  "电影": "🎬",
-  "户外": "🌿",
-  "文艺": "🎨",
-  "运动": "🚴",
-  "探店": "☕",
-  "手作": "🎭",
-  "拍照": "📸",
-  "游戏": "🎮",
-  "旅行": "✈️",
-  "居家": "🏠",
-  "其他": "💡",
+  '美食': '🍜',
+  '电影': '🎬',
+  '户外': '🌿',
+  '文艺': '🎨',
+  '运动': '🚴',
+  '探店': '☕',
+  '手作': '🎭',
+  '拍照': '📸',
+  '游戏': '🎮',
+  '旅行': '✈️',
+  '居家': '🏠',
+  '其他': '💡',
 };
 
 function formatDate(dateStr: string): string {
@@ -30,19 +30,19 @@ function formatDate(dateStr: string): string {
   const diffMs = now.getTime() - date.getTime();
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
   
-  if (diffDays === 0) return "今天";
-  if (diffDays === 1) return "昨天";
+  if (diffDays === 0) return '今天';
+  if (diffDays === 1) return '昨天';
   if (diffDays < 7) return `${diffDays}天前`;
   
-  return date.toLocaleDateString("zh-CN", {
-    month: "long",
-    day: "numeric",
+  return date.toLocaleDateString('zh-CN', {
+    month: 'long',
+    day: 'numeric',
   });
 }
 
 export function IdeaCard({ idea, index }: IdeaCardProps) {
   const { toggleLike } = useIdeaStore();
-  const emoji = categoryEmojis[idea.category] || "💡";
+  const emoji = categoryEmojis[idea.category] || '💡';
 
   return (
     <motion.article
@@ -92,9 +92,9 @@ export function IdeaCard({ idea, index }: IdeaCardProps) {
           <button
             onClick={() => toggleLike(idea.id)}
             className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300",
-              "hover:bg-primary/5 active:scale-95",
-              idea.isLiked ? "text-primary" : "text-muted-foreground hover:text-primary"
+              'flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300',
+              'hover:bg-primary/5 active:scale-95',
+              idea.isLiked ? 'text-primary' : 'text-muted-foreground hover:text-primary'
             )}
           >
             <motion.div
@@ -103,7 +103,7 @@ export function IdeaCard({ idea, index }: IdeaCardProps) {
             >
               <Heart
                 size={20}
-                className={cn("transition-colors duration-300", idea.isLiked && "fill-primary")}
+                className={cn('transition-colors duration-300', idea.isLiked && 'fill-primary')}
               />
             </motion.div>
             <span className="text-sm font-medium">{idea.likes}</span>

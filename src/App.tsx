@@ -1,7 +1,7 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { HomePage } from "@/pages/HomePage";
-import { PlanPage } from "@/pages/PlanPage";
-import { IdeasPage } from "@/pages/IdeasPage";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HomePage } from '@/pages/HomePage';
+import { PlanPage } from '@/pages/PlanPage';
+import { IdeasPage } from '@/pages/IdeasPage';
 
 export default function App() {
   return (
