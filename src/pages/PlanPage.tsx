@@ -1,16 +1,17 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Save, RotateCcw, Share2, Cloud, Heart, Sparkles, Clock, Layers, Eye, Highlighter, Check, AlertCircle } from 'lucide-react';
+import { motion, Reorder } from 'framer-motion';
+import { ArrowLeft, Save, RotateCcw, Share2, Cloud, Heart, Sparkles, Clock, Layers, Eye, Highlighter, Check, AlertCircle, Edit3, GripVertical } from 'lucide-react';
 import { HeartParticles } from '../components/HeartParticles';
 import { TimelineItem } from '../components/TimelineItem';
 import { SurpriseBox } from '../components/SurpriseBox';
 import { LoadingAnimation } from '../components/LoadingAnimation';
 import { HistoryModal } from '../components/HistoryModal';
+import { EditActivityModal } from '../components/EditActivityModal';
 import { usePlanStore } from '../store/usePlanStore';
-import { comparePlans, getDifferentFields, getFieldLabel } from '../utils/planDiffUtils';
+import { comparePlans, getDifferentFields } from '../utils/planDiffUtils';
 import { cn } from '@/lib/utils';
-import type { DiffField } from '../types';
+import type { DiffField, Activity } from '../types';
 
 const planColors = [
   { primary: 'from-rose-500 to-pink-500', bg: 'bg-rose-50', border: 'border-rose-200', ring: 'ring-rose-400' },
@@ -33,6 +34,9 @@ export function PlanPage() {
   const [showHistory, setShowHistory] = useState(false);
   const [showDiffHighlight, setShowDiffHighlight] = useState(true);
   const [viewMode, setViewMode] = useState<'compare' | 'single'>('compare');
+  const [editMode, setEditMode] = useState(false);
+  const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
   const { 
     currentPlan, 
     currentPlans, 
@@ -45,6 +49,8 @@ export function PlanPage() {
     resetPreferences, 
     clearCurrentPlan,
     selectPlan,
+    reorderActivities,
+    updateActivity,
   } = usePlanStore();
 
   const hasMultiplePlans = currentPlans.length > 1;
@@ -68,6 +74,19 @@ export function PlanPage() {
   const handleSave = () => {
     saveCurrentPlan();
     alert('方案已保存！可以在历史记录中查看');
+  };
+
+  const handleEditActivity = (activity: Activity) => {
+    setEditingActivity(activity);
+    setShowEditModal(true);
+  };
+
+  const handleSaveActivity = (activityId: string, updates: Partial<Activity>) => {
+    updateActivity(activityId, updates);
+  };
+
+  const handleReorderActivities = (newOrder: Activity[]) => {
+    reorderActivities(newOrder);
   };
 
   const handleShare = async () => {
@@ -111,6 +130,12 @@ export function PlanPage() {
     <div className="min-h-screen relative">
       <HeartParticles />
       <HistoryModal isOpen={showHistory} onClose={() => setShowHistory(false)} />
+      <EditActivityModal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        activity={editingActivity}
+        onSave={handleSaveActivity}
+      />
 
       <div className="relative z-10">
         <motion.header
@@ -152,6 +177,18 @@ export function PlanPage() {
                       <span className="hidden sm:inline">差异高亮</span>
                     </button>
                   </>
+                )}
+                {viewMode === 'single' && (
+                  <button
+                    onClick={() => setEditMode(!editMode)}
+                    className={cn(
+                      "btn-secondary flex items-center gap-2 transition-all",
+                      editMode && "bg-primary/10 border-primary/30 text-primary"
+                    )}
+                  >
+                    {editMode ? <Check size={16} /> : <Edit3 size={16} />}
+                    <span className="hidden sm:inline">{editMode ? '完成编辑' : '编辑方案'}</span>
+                  </button>
                 )}
                 <button
                   onClick={() => {
@@ -422,10 +459,28 @@ export function PlanPage() {
                       <p className="text-sm text-muted-foreground mb-1">预算范围</p>
                       <p className="text-2xl font-bold gradient-text">{activePlan.totalBudget}</p>
                     </div>
-                    <div className="card-elegant px-6 py-4">
-                      <p className="text-sm text-muted-foreground mb-1">预计花费</p>
-                      <p className="text-2xl font-bold gradient-text">¥{activePlan.estimatedCost}</p>
-                    </div>
+                    <motion.div 
+                      key={activePlan.estimatedCost}
+                      initial={{ scale: 1 }}
+                      animate={{ scale: [1, 1.05, 1] }}
+                      transition={{ duration: 0.3 }}
+                      className="card-elegant px-6 py-4 relative overflow-hidden"
+                    >
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="absolute inset-0 bg-gradient-to-r from-rose-500/5 to-pink-500/5"
+                      />
+                      <p className="text-sm text-muted-foreground mb-1 relative z-10">预计花费</p>
+                      <motion.p 
+                        key={activePlan.estimatedCost}
+                        initial={{ scale: 1.2, color: '#e11d48' }}
+                        animate={{ scale: 1, color: 'inherit' }}
+                        className="text-2xl font-bold gradient-text relative z-10"
+                      >
+                        ¥{activePlan.estimatedCost}
+                      </motion.p>
+                    </motion.div>
                     <div className="card-elegant px-6 py-4">
                       <p className="text-sm text-muted-foreground mb-1">行程安排</p>
                       <p className="text-2xl font-bold gradient-text">{activePlan.activities.length} 项</p>
@@ -441,24 +496,64 @@ export function PlanPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
-                  className="flex items-center gap-3 mb-8"
+                  className="flex items-center justify-between mb-8"
                 >
-                  <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-                    <Heart className="text-primary" size={20} fill="currentColor" />
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                      <Heart className="text-primary" size={20} fill="currentColor" />
+                    </div>
+                    <h2 className="text-2xl font-bold">今日行程</h2>
                   </div>
-                  <h2 className="text-2xl font-bold">今日行程</h2>
+                  {editMode && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="flex items-center gap-2 text-sm text-muted-foreground bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200"
+                    >
+                      <GripVertical size={14} className="text-amber-500" />
+                      <span>拖拽手柄可调整顺序</span>
+                    </motion.div>
+                  )}
                 </motion.div>
 
-                <div className="space-y-2">
-                  {activePlan.activities.map((activity, index) => (
-                    <TimelineItem
-                      key={activity.id}
-                      activity={activity}
-                      index={index}
-                      isLast={index === activePlan.activities.length - 1}
-                    />
-                  ))}
-                </div>
+                {editMode ? (
+                  <Reorder.Group
+                    axis="y"
+                    values={activePlan.activities}
+                    onReorder={handleReorderActivities}
+                    className="space-y-2"
+                  >
+                    {activePlan.activities.map((activity, index) => (
+                      <Reorder.Item
+                        key={activity.id}
+                        value={activity}
+                        id={activity.id}
+                        className="group"
+                      >
+                        <TimelineItem
+                          activity={activity}
+                          index={index}
+                          isLast={index === activePlan.activities.length - 1}
+                          showEditControls={true}
+                          onClick={() => handleEditActivity(activity)}
+                          onEditClick={() => handleEditActivity(activity)}
+                        />
+                      </Reorder.Item>
+                    ))}
+                  </Reorder.Group>
+                ) : (
+                  <div className="space-y-2">
+                    {activePlan.activities.map((activity, index) => (
+                      <TimelineItem
+                        key={activity.id}
+                        activity={activity}
+                        index={index}
+                        isLast={index === activePlan.activities.length - 1}
+                        onClick={() => handleEditActivity(activity)}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             </section>
 

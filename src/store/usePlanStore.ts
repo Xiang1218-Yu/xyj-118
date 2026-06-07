@@ -1,6 +1,10 @@
 import { create } from 'zustand';
-import type { UserPreferences, DatePlan, PlanCount } from '../types';
+import type { UserPreferences, DatePlan, PlanCount, Activity } from '../types';
 import { generateDatePlan, savePlanToStorage, getSavedPlans, deletePlanFromStorage, clearAllPlans, generateMultipleDatePlans } from '../utils/planGenerator';
+
+const calculateEstimatedCost = (activities: Activity[]): number => {
+  return activities.reduce((sum, activity) => sum + activity.cost, 0);
+};
 
 interface PlanState {
   preferences: UserPreferences;
@@ -23,6 +27,8 @@ interface PlanState {
   loadPlan: (plan: DatePlan) => void;
   clearAllSavedPlans: () => void;
   selectPlan: (index: number) => void;
+  reorderActivities: (newOrder: Activity[]) => void;
+  updateActivity: (activityId: string, updates: Partial<Activity>) => void;
 }
 
 const defaultPreferences: UserPreferences = {
@@ -132,5 +138,33 @@ export const usePlanStore = create<PlanState>((set, get) => ({
         currentPlan: currentPlans[index]
       });
     }
+  },
+
+  reorderActivities: (newOrder) => {
+    const { currentPlans, selectedPlanIndex } = get();
+    const updatedPlans = [...currentPlans];
+    const plan = { ...updatedPlans[selectedPlanIndex] };
+    plan.activities = newOrder;
+    plan.estimatedCost = calculateEstimatedCost(newOrder);
+    updatedPlans[selectedPlanIndex] = plan;
+    set({ 
+      currentPlans: updatedPlans,
+      currentPlan: plan,
+    });
+  },
+
+  updateActivity: (activityId, updates) => {
+    const { currentPlans, selectedPlanIndex } = get();
+    const updatedPlans = [...currentPlans];
+    const plan = { ...updatedPlans[selectedPlanIndex] };
+    plan.activities = plan.activities.map((activity) =>
+      activity.id === activityId ? { ...activity, ...updates } : activity
+    );
+    plan.estimatedCost = calculateEstimatedCost(plan.activities);
+    updatedPlans[selectedPlanIndex] = plan;
+    set({ 
+      currentPlans: updatedPlans,
+      currentPlan: plan,
+    });
   },
 }));

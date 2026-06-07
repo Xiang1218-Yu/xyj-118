@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion';
-import { MapPin, Clock, Star, Utensils, Film, Palette, Bike, Gift, AlertCircle } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { motion, useDragControls } from 'framer-motion';
+import { MapPin, Clock, Star, Utensils, Film, Palette, Bike, Gift, AlertCircle, GripVertical, Edit3 } from 'lucide-react';
 import type { Activity, DiffField } from '../types';
 import { cn } from '@/lib/utils';
 
@@ -9,6 +10,11 @@ interface TimelineItemProps {
   isLast: boolean;
   differentFields?: DiffField[];
   showDiffHighlight?: boolean;
+  onClick?: () => void;
+  onEditClick?: () => void;
+  showEditControls?: boolean;
+  onDragStart?: () => void;
+  onDragEnd?: () => void;
 }
 
 const activityIcons = {
@@ -35,9 +41,23 @@ const diffFieldToClass: Record<DiffField, string> = {
   type: 'ring-2 ring-orange-400 bg-orange-50/50',
 };
 
-export function TimelineItem({ activity, index, isLast, differentFields = [], showDiffHighlight = false }: TimelineItemProps) {
+export function TimelineItem({ 
+  activity, 
+  index, 
+  isLast, 
+  differentFields = [], 
+  showDiffHighlight = false,
+  onClick,
+  onEditClick,
+  showEditControls = false,
+  onDragStart,
+  onDragEnd,
+}: TimelineItemProps) {
   const Icon = activityIcons[activity.type] || Palette;
   const iconColor = activityColors[activity.type];
+  const controls = useDragControls();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const getDiffClass = (field: DiffField): string => {
     if (!showDiffHighlight) return '';
@@ -46,12 +66,40 @@ export function TimelineItem({ activity, index, isLast, differentFields = [], sh
 
   const hasAnyDiff = showDiffHighlight && differentFields.length > 0;
 
+  const handleDragStart = (e: React.PointerEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+    controls.start(e);
+    onDragStart?.();
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+    onDragEnd?.();
+  };
+
   return (
     <motion.div
+      ref={containerRef}
       initial={{ opacity: 0, x: -30 }}
-      animate={{ opacity: 1, x: 0 }}
+      animate={{ 
+        opacity: 1, 
+        x: 0,
+        scale: isDragging ? 1.02 : 1,
+        boxShadow: isDragging ? '0 20px 40px rgba(0,0,0,0.15)' : 'none',
+        zIndex: isDragging ? 50 : 'auto',
+      }}
       transition={{ duration: 0.5, delay: index * 0.15 }}
-      className="relative pl-12 pb-8"
+      drag={showEditControls ? true : false}
+      dragControls={controls}
+      dragListener={false}
+      dragElastic={0}
+      onDragEnd={handleDragEnd}
+      className={cn(
+        "relative pl-12 pb-8",
+        isDragging && "opacity-80"
+      )}
     >
       {!isLast && (
         <div className="absolute left-[19px] top-10 w-0.5 h-full bg-gradient-to-b from-primary to-primary/20" />
@@ -69,10 +117,38 @@ export function TimelineItem({ activity, index, isLast, differentFields = [], sh
         <Icon size={18} />
       </motion.div>
 
-      <div className={cn(
-        "bg-white rounded-2xl shadow-lg overflow-hidden border border-border/50 hover:shadow-xl transition-all duration-300",
-        hasAnyDiff && "ring-2 ring-amber-300 shadow-amber-100 shadow-lg"
-      )}>
+      {showEditControls && (
+        <div
+          onPointerDown={handleDragStart}
+          className="absolute left-14 top-4 z-20 cursor-grab active:cursor-grabbing p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-md border border-gray-200 hover:bg-primary hover:text-white transition-all group touch-none select-none"
+          title="拖拽排序"
+        >
+          <GripVertical size={16} className="text-gray-400 group-hover:text-white" />
+        </div>
+      )}
+
+      {showEditControls && onEditClick && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onEditClick();
+          }}
+          className="absolute right-4 top-4 z-20 p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-md border border-gray-200 hover:bg-primary hover:text-white transition-all group"
+          title="编辑活动"
+        >
+          <Edit3 size={16} className="text-gray-400 group-hover:text-white" />
+        </button>
+      )}
+
+      <div 
+        className={cn(
+          "bg-white rounded-2xl shadow-lg overflow-hidden border border-border/50 transition-all duration-300",
+          hasAnyDiff && "ring-2 ring-amber-300 shadow-amber-100 shadow-lg",
+          onClick && "cursor-pointer hover:shadow-xl hover:border-primary/30",
+          isDragging && "ring-2 ring-primary shadow-2xl"
+        )}
+        onClick={onClick}
+      >
         {hasAnyDiff && (
           <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1.5 flex items-center gap-2">
             <AlertCircle size={14} />
