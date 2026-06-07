@@ -138,6 +138,13 @@ export function HomePage() {
 
               <div className="flex items-center gap-2">
                 <button
+                  onClick={() => navigate('/quiz')}
+                  className="flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white rounded-xl border border-border hover:border-primary/30 transition-all duration-300 group"
+                >
+                  <Heart size={18} className="text-pink-500" fill="currentColor" />
+                  <span className="text-sm font-medium text-foreground hidden sm:inline">默契测验</span>
+                </button>
+                <button
                   onClick={() => navigate('/ideas')}
                   onMouseEnter={handlePrefetchIdeas}
                   className="flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white rounded-xl border border-border hover:border-primary/30 transition-all duration-300 group"
@@ -199,6 +206,36 @@ export function HomePage() {
             <p className="text-muted-foreground max-w-xl mx-auto">
               只需回答几个简单问题，我们将为你们量身定制独一无二的约会方案 💖
             </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="max-w-3xl mx-auto mb-8"
+          >
+            <div
+              onClick={() => navigate('/quiz')}
+              className="bg-gradient-to-r from-pink-50 to-rose-50 rounded-2xl p-5 border border-pink-200 cursor-pointer hover:shadow-lg hover:shadow-pink-200/50 transition-all duration-300 group"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <Heart className="text-white" size={28} fill="currentColor" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-bold text-lg text-foreground">情侣默契测验</h3>
+                    <span className="px-2 py-0.5 bg-pink-100 text-pink-600 text-xs font-medium rounded-full">
+                      新功能
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    测试你们的默契度、相爱程度和三观契合度，还有好玩的答案揭晓动画和雷达图分析哦！
+                  </p>
+                </div>
+                <ArrowRight size={20} className="text-pink-500 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
           </motion.div>
 
           <motion.div

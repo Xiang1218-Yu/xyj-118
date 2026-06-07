@@ -124,3 +124,42 @@ export interface Idea {
   createdAt: string;
   isLiked: boolean;
 }
+
+export type QuizTheme = 'chemistry' | 'love' | 'values';
+
+export interface QuizOption {
+  id: string;
+  text: string;
+}
+
+export interface QuizQuestion {
+  id: string;
+  question: string;
+  options: QuizOption[];
+}
+
+export interface Quiz {
+  id: QuizTheme;
+  title: string;
+  description: string;
+  icon: string;
+  color: string;
+  questions: QuizQuestion[];
+}
+
+export interface PlayerAnswer {
+  questionId: string;
+  optionId: string;
+}
+
+export interface QuizResult {
+  theme: QuizTheme;
+  player1Answers: PlayerAnswer[];
+  player2Answers: PlayerAnswer[];
+  matchScore: number;
+  dimensionScores: {
+    dimension: string;
+    score: number;
+  }[];
+  analysis: string;
+}
