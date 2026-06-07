@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sparkles, MapPin, ArrowRight, Calendar, Wallet, Users, Clock, Lightbulb, Layers, BookOpen, AlertCircle } from 'lucide-react';
+import { Heart, Sparkles, MapPin, ArrowRight, Calendar, Wallet, Users, Clock, Lightbulb, Layers, BookOpen, AlertCircle } from '../components/Icons';
 import { cn } from '@/lib/utils';
 import { HeartParticles } from '../components/HeartParticles';
 import { OptionCard } from '../components/OptionCard';
 import { LoadingAnimation } from '../components/LoadingAnimation';
-import { HistoryModal } from '../components/HistoryModal';
-import { SurpriseLibraryModal } from '../components/SurpriseLibraryModal';
+import { LazyHistoryModal, LazySurpriseLibraryModal } from '../components/LazyModal';
 import { usePlanStore } from '../store/usePlanStore';
 import { useSurpriseStore } from '../store/useSurpriseStore';
+import { usePrefetch } from '../hooks/usePrefetch';
 import type { RelationshipStage, BudgetLevel, PlanCount } from '../types';
 
 const relationshipStages: { value: RelationshipStage; label: string; icon: string; description: string }[] = [
@@ -48,11 +48,24 @@ const planCounts: { value: PlanCount; label: string; icon: string; description: 
 
 export function HomePage() {
   const navigate = useNavigate();
+  const { prefetchPage, prefetchComponent } = usePrefetch();
   const { preferences, setRelationshipStage, toggleInterest, setBudget, setPlanCount, setUseFavoriteSurprises, generateMultiplePlans, isGenerating, savedPlans, loadSavedPlans } = usePlanStore();
   const { collectedSurprises, loadCollectedSurprises, getFavoriteSurprises } = useSurpriseStore();
   const [step, setStep] = useState(1);
   const [showHistory, setShowHistory] = useState(false);
   const [showSurpriseLibrary, setShowSurpriseLibrary] = useState(false);
+
+  const handlePrefetchIdeas = useCallback(() => {
+    prefetchPage('/ideas');
+  }, [prefetchPage]);
+
+  const handlePrefetchHistory = useCallback(() => {
+    prefetchComponent(() => import('@/components/HistoryModal'));
+  }, [prefetchComponent]);
+
+  const handlePrefetchSurprise = useCallback(() => {
+    prefetchComponent(() => import('@/components/SurpriseLibraryModal'));
+  }, [prefetchComponent]);
 
   useEffect(() => {
     loadCollectedSurprises();
@@ -102,8 +115,8 @@ export function HomePage() {
   return (
     <div className="min-h-screen relative overflow-hidden">
       <HeartParticles />
-      <HistoryModal isOpen={showHistory} onClose={() => setShowHistory(false)} />
-      <SurpriseLibraryModal isOpen={showSurpriseLibrary} onClose={() => setShowSurpriseLibrary(false)} />
+      <LazyHistoryModal isOpen={showHistory} onClose={() => setShowHistory(false)} />
+      <LazySurpriseLibraryModal isOpen={showSurpriseLibrary} onClose={() => setShowSurpriseLibrary(false)} />
 
       <div className="relative z-10">
         <motion.header
@@ -126,6 +139,7 @@ export function HomePage() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => navigate('/ideas')}
+                  onMouseEnter={handlePrefetchIdeas}
                   className="flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white rounded-xl border border-border hover:border-primary/30 transition-all duration-300 group"
                 >
                   <Lightbulb size={18} className="text-primary" />
@@ -136,6 +150,7 @@ export function HomePage() {
                     loadCollectedSurprises();
                     setShowSurpriseLibrary(true);
                   }}
+                  onMouseEnter={handlePrefetchSurprise}
                   className="flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white rounded-xl border border-border hover:border-primary/30 transition-all duration-300"
                 >
                   <Sparkles size={18} className="text-amber-500" />
@@ -151,6 +166,7 @@ export function HomePage() {
                     loadSavedPlans();
                     setShowHistory(true);
                   }}
+                  onMouseEnter={handlePrefetchHistory}
                   className="flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white rounded-xl border border-border hover:border-primary/30 transition-all duration-300"
                 >
                   <Clock size={18} className="text-primary" />

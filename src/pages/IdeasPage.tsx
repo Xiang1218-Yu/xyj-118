@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Plus, TrendingUp, Clock, Filter, Lightbulb } from 'lucide-react';
+import { ArrowLeft, Plus, TrendingUp, Clock, Filter, Lightbulb } from '../components/Icons';
 import { useNavigate } from 'react-router-dom';
 import { useIdeaStore } from '../store/useIdeaStore';
 import { IdeaCard } from '../components/IdeaCard';
-import { IdeaForm } from '../components/IdeaForm';
+import { LazyIdeaForm } from '../components/LazyModal';
 import { cn } from '@/lib/utils';
 import type { IdeaCategory } from '../types';
 
@@ -222,7 +222,7 @@ export function IdeasPage() {
         )}
       </div>
 
-      {showForm && <IdeaForm onClose={() => setShowForm(false)} />}
+      {showForm && <LazyIdeaForm onClose={() => setShowForm(false)} />}
     </div>
   );
 }

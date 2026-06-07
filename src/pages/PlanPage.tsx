@@ -1,14 +1,12 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, Reorder } from 'framer-motion';
-import { ArrowLeft, Save, RotateCcw, Share2, Cloud, Heart, Sparkles, Clock, Layers, Eye, Highlighter, Check, AlertCircle, Edit3, GripVertical, BookOpen } from 'lucide-react';
+import { ArrowLeft, Save, RotateCcw, Share2, Cloud, Heart, Sparkles, Clock, Layers, Eye, Highlighter, Check, AlertCircle, Edit3, GripVertical, BookOpen } from '../components/Icons';
 import { HeartParticles } from '../components/HeartParticles';
 import { TimelineItem } from '../components/TimelineItem';
 import { SurpriseBox } from '../components/SurpriseBox';
 import { LoadingAnimation } from '../components/LoadingAnimation';
-import { HistoryModal } from '../components/HistoryModal';
-import { EditActivityModal } from '../components/EditActivityModal';
-import { SurpriseLibraryModal } from '../components/SurpriseLibraryModal';
+import { LazyHistoryModal, LazyEditActivityModal, LazySurpriseLibraryModal } from '../components/LazyModal';
 import { usePlanStore } from '../store/usePlanStore';
 import { useSurpriseStore } from '../store/useSurpriseStore';
 import { comparePlans, getDifferentFields } from '../utils/planDiffUtils';
@@ -144,9 +142,9 @@ export function PlanPage() {
   return (
     <div className="min-h-screen relative">
       <HeartParticles />
-      <HistoryModal isOpen={showHistory} onClose={() => setShowHistory(false)} />
-      <SurpriseLibraryModal isOpen={showSurpriseLibrary} onClose={() => setShowSurpriseLibrary(false)} />
-      <EditActivityModal
+      <LazyHistoryModal isOpen={showHistory} onClose={() => setShowHistory(false)} />
+      <LazySurpriseLibraryModal isOpen={showSurpriseLibrary} onClose={() => setShowSurpriseLibrary(false)} />
+      <LazyEditActivityModal
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
         activity={editingActivity}

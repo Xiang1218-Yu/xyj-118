@@ -6,12 +6,21 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "build:analyze": "tsc -b && vite build --mode analyze",
+    "build:report": "npm run build:analyze && open dist/stats.html",
+    "build:prod": "NODE_ENV=production npm run build",
     "preview": "vite preview",
+    "preview:https": "vite preview --https",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "check": "tsc -b --noEmit",
+    "check:watch": "tsc -b --noEmit --watch",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "clean": "rm -rf dist node_modules/.tmp",
+    "ci": "npm run clean && npm install && npm run check && npm run lint && npm run test && npm run build"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -37,6 +46,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
     "postcss": "^8.5.3",
+    "rollup-plugin-visualizer": "^7.0.1",
     "tailwindcss": "^3.4.17",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",

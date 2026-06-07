@@ -3,10 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href="/favicon.svg" as="image" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="情侣约会方案生成器，一键生成专属浪漫行程" />
+    <meta name="theme-color" content="#FF6B9D" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="约会策划师" />
+    <link rel="dns-prefetch" href="https://api.trae.ai" />
+    <link rel="preconnect" href="https://api.trae.ai" crossorigin />
     <title>今天去哪儿玩？ - 情侣约会方案生成器</title>
     <script type="module">
+      window.__toCdnUrl = function(filename) {
+        return filename;
+      };
       if (import.meta.hot?.on) {
         import.meta.hot.on('vite:error', (error) => {
           if (error.err) {
