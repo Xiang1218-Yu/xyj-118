@@ -31,4 +31,6 @@ export {
   User,
   DollarSign,
   RefreshCw,
+  Compass,
+  Home,
 } from 'lucide-react';
