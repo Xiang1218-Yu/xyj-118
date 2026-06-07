@@ -1,0 +1,1 @@
+const ideaFormContent = `import { useState }
