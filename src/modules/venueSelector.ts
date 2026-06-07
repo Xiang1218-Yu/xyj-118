@@ -56,7 +56,17 @@ export function selectVenues(filteredVenues: Venue[],
   const selectedActivities = shuffledActivities.slice(0, Math.min(3, shuffledActivities.length));
 
   if (selectedActivities.length < 2) {
-    const fallback = shuffleArray([...venues.filter(v => v.type !== 'restaurant')]).slice(0, 2);
+    let fallbackPool = filteredVenues.filter(v => v.type !== 'restaurant');
+    if (fallbackPool.length === 0) {
+      fallbackPool = venues.filter(v => v.type !== 'restaurant');
+    }
+    if (fallbackPool.length === 0) {
+      fallbackPool = filteredVenues.filter(v => v.id !== lunch.id && v.id !== dinner.id);
+    }
+    if (fallbackPool.length === 0) {
+      fallbackPool = filteredVenues;
+    }
+    const fallback = shuffleArray(fallbackPool).slice(0, 2);
     selectedActivities.push(...fallback);
   }
 
