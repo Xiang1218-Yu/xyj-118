@@ -1,0 +1,302 @@
+[
+  {
+    "id": "outfit-1",
+    "top": {
+      "id": "top-1",
+      "name": "粉色雪纺衬衫",
+      "type": "top",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=pink%20chiffon%20blouse%20elegant%20romantic%20fashion&image_size=square_hd",
+      "color": "粉色",
+      "style": "优雅"
+    },
+    "bottom": {
+      "id": "bottom-1",
+      "name": "高腰阔腿裤",
+      "type": "bottom",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=high%20waisted%20wide%20leg%20pants%20beige%20elegant%20fashion&image_size=square_hd",
+      "color": "米色",
+      "style": "优雅"
+    },
+    "suitableFor": {
+      "dateTypes": ["正式约会", "文艺约会"],
+      "weather": ["晴天", "多云", "阴天"],
+      "seasons": ["春季", "秋季"],
+      "atmospheres": ["浪漫", "优雅"]
+    }
+  },
+  {
+    "id": "outfit-2",
+    "top": {
+      "id": "top-2",
+      "name": "白色简约T恤",
+      "type": "top",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=white%20simple%20cotton%20tshirt%20casual%20fashion&image_size=square_hd",
+      "color": "白色",
+      "style": "休闲"
+    },
+    "bottom": {
+      "id": "bottom-2",
+      "name": "蓝色牛仔裤",
+      "type": "bottom",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=blue%20denim%20jeans%20casual%20fashion&image_size=square_hd",
+      "color": "蓝色",
+      "style": "休闲"
+    },
+    "suitableFor": {
+      "dateTypes": ["休闲约会", "运动约会"],
+      "weather": ["晴天", "多云"],
+      "seasons": ["春季", "夏季", "秋季"],
+      "atmospheres": ["休闲", "活力"]
+    }
+  },
+  {
+    "id": "outfit-3",
+    "top": {
+      "id": "top-3",
+      "name": "黑色针织衫",
+      "type": "top",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=black%20knit%20sweater%20elegant%20winter%20fashion&image_size=square_hd",
+      "color": "黑色",
+      "style": "优雅"
+    },
+    "bottom": {
+      "id": "bottom-3",
+      "name": "格纹半身裙",
+      "type": "bottom",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=plaid%20midi%20skirt%20vintage%20elegant%20fashion&image_size=square_hd",
+      "color": "格纹",
+      "style": "复古"
+    },
+    "suitableFor": {
+      "dateTypes": ["文艺约会", "正式约会"],
+      "weather": ["晴天", "多云", "阴天"],
+      "seasons": ["秋季", "冬季"],
+      "atmospheres": ["复古", "优雅"]
+    }
+  },
+  {
+    "id": "outfit-4",
+    "top": {
+      "id": "top-4",
+      "name": "条纹海魂衫",
+      "type": "top",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=navy%20white%20striped%20breton%20shirt%20fresh%20fashion&image_size=square_hd",
+      "color": "蓝白条纹",
+      "style": "清新"
+    },
+    "bottom": {
+      "id": "bottom-4",
+      "name": "白色短裤",
+      "type": "bottom",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=white%20linen%20shorts%20summer%20fresh%20fashion&image_size=square_hd",
+      "color": "白色",
+      "style": "清新"
+    },
+    "suitableFor": {
+      "dateTypes": ["休闲约会", "旅行约会"],
+      "weather": ["晴天"],
+      "seasons": ["夏季"],
+      "atmospheres": ["清新", "活力"]
+    }
+  },
+  {
+    "id": "outfit-5",
+    "top": {
+      "id": "top-5",
+      "name": "酒红色丝绒衬衫",
+      "type": "top",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=burgundy%20velvet%20shirt%20romantic%20elegant%20fashion&image_size=square_hd",
+      "color": "酒红色",
+      "style": "浪漫"
+    },
+    "bottom": {
+      "id": "bottom-5",
+      "name": "黑色修身裤",
+      "type": "bottom",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=black%20slim%20fit%20dress%20pants%20elegant%20fashion&image_size=square_hd",
+      "color": "黑色",
+      "style": "优雅"
+    },
+    "suitableFor": {
+      "dateTypes": ["正式约会", "文艺约会"],
+      "weather": ["晴天", "多云", "阴天", "雨天"],
+      "seasons": ["秋季", "冬季"],
+      "atmospheres": ["浪漫", "优雅"]
+    }
+  },
+  {
+    "id": "outfit-6",
+    "top": {
+      "id": "top-6",
+      "name": "连帽卫衣",
+      "type": "top",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=gray%20hoodie%20sweatshirt%20casual%20sporty%20fashion&image_size=square_hd",
+      "color": "灰色",
+      "style": "运动"
+    },
+    "bottom": {
+      "id": "bottom-6",
+      "name": "运动束脚裤",
+      "type": "bottom",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=black%20jogger%20pants%20sporty%20casual%20fashion&image_size=square_hd",
+      "color": "黑色",
+      "style": "运动"
+    },
+    "suitableFor": {
+      "dateTypes": ["运动约会", "休闲约会"],
+      "weather": ["晴天", "多云", "阴天"],
+      "seasons": ["春季", "秋季"],
+      "atmospheres": ["活力", "休闲"]
+    }
+  },
+  {
+    "id": "outfit-7",
+    "top": {
+      "id": "top-7",
+      "name": "薄荷绿针织开衫",
+      "type": "top",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=mint%20green%20knit%20cardigan%20fresh%20romantic%20fashion&image_size=square_hd",
+      "color": "薄荷绿",
+      "style": "清新"
+    },
+    "bottom": {
+      "id": "bottom-7",
+      "name": "白色连衣裙",
+      "type": "bottom",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=white%20flowy%20midi%20dress%20romantic%20fresh%20fashion&image_size=square_hd",
+      "color": "白色",
+      "style": "浪漫"
+    },
+    "suitableFor": {
+      "dateTypes": ["正式约会", "文艺约会"],
+      "weather": ["晴天", "多云"],
+      "seasons": ["春季", "夏季"],
+      "atmospheres": ["浪漫", "清新"]
+    }
+  },
+  {
+    "id": "outfit-8",
+    "top": {
+      "id": "top-8",
+      "name": "复古花衬衫",
+      "type": "top",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=vintage%20floral%20print%20shirt%20retro%20fashion&image_size=square_hd",
+      "color": "花色",
+      "style": "复古"
+    },
+    "bottom": {
+      "id": "bottom-8",
+      "name": "高腰直筒牛仔裤",
+      "type": "bottom",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=high%20waisted%20straight%20leg%20jeans%20vintage%20retro%20fashion&image_size=square_hd",
+      "color": "浅蓝色",
+      "style": "复古"
+    },
+    "suitableFor": {
+      "dateTypes": ["休闲约会", "文艺约会"],
+      "weather": ["晴天", "多云"],
+      "seasons": ["春季", "夏季", "秋季"],
+      "atmospheres": ["复古", "休闲"]
+    }
+  },
+  {
+    "id": "outfit-9",
+    "top": {
+      "id": "top-9",
+      "name": "驼色大衣",
+      "type": "top",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=camel%20wool%20coat%20elegant%20winter%20fashion&image_size=square_hd",
+      "color": "驼色",
+      "style": "优雅"
+    },
+    "bottom": {
+      "id": "bottom-9",
+      "name": "黑色针织连衣裙",
+      "type": "bottom",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=black%20knit%20sweater%20dress%20elegant%20winter%20fashion&image_size=square_hd",
+      "color": "黑色",
+      "style": "优雅"
+    },
+    "suitableFor": {
+      "dateTypes": ["正式约会", "文艺约会"],
+      "weather": ["晴天", "多云", "阴天", "雪天"],
+      "seasons": ["冬季"],
+      "atmospheres": ["优雅", "浪漫"]
+    }
+  },
+  {
+    "id": "outfit-10",
+    "top": {
+      "id": "top-10",
+      "name": "黄色卫衣",
+      "type": "top",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=bright%20yellow%20oversized%20sweatshirt%20casual%20energetic%20fashion&image_size=square_hd",
+      "color": "亮黄色",
+      "style": "活力"
+    },
+    "bottom": {
+      "id": "bottom-10",
+      "name": "运动leggings",
+      "type": "bottom",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=black%20athletic%20leggings%20sporty%20fashion&image_size=square_hd",
+      "color": "黑色",
+      "style": "运动"
+    },
+    "suitableFor": {
+      "dateTypes": ["运动约会", "休闲约会"],
+      "weather": ["晴天", "多云"],
+      "seasons": ["春季", "夏季", "秋季"],
+      "atmospheres": ["活力", "休闲"]
+    }
+  },
+  {
+    "id": "outfit-11",
+    "top": {
+      "id": "top-11",
+      "name": "蕾丝吊带衫",
+      "type": "top",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=white%20lace%20camisole%20romantic%20feminine%20fashion&image_size=square_hd",
+      "color": "白色",
+      "style": "浪漫"
+    },
+    "bottom": {
+      "id": "bottom-11",
+      "name": "粉色缎面半裙",
+      "type": "bottom",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=pink%20satin%20midi%20skirt%20romantic%20elegant%20fashion&image_size=square_hd",
+      "color": "粉色",
+      "style": "浪漫"
+    },
+    "suitableFor": {
+      "dateTypes": ["正式约会", "居家约会"],
+      "weather": ["晴天", "多云", "阴天"],
+      "seasons": ["春季", "夏季"],
+      "atmospheres": ["浪漫", "优雅"]
+    }
+  },
+  {
+    "id": "outfit-12",
+    "top": {
+      "id": "top-12",
+      "name": "宽松毛衣",
+      "type": "top",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=beige%20oversized%20knit%20sweater%20cozy%20casual%20fashion&image_size=square_hd",
+      "color": "米色",
+      "style": "休闲"
+    },
+    "bottom": {
+      "id": "bottom-12",
+      "name": "加绒leggings",
+      "type": "bottom",
+      "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20gray%20fleece%20lined%20leggings%20cozy%20casual%20fashion&image_size=square_hd",
+      "color": "深灰色",
+      "style": "休闲"
+    },
+    "suitableFor": {
+      "dateTypes": ["居家约会", "休闲约会"],
+      "weather": ["晴天", "多云", "阴天", "雨天", "雪天"],
+      "seasons": ["秋季", "冬季"],
+      "atmospheres": ["休闲", "温馨"]
+    }
+  }
+]

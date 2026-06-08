@@ -208,3 +208,88 @@ export const PRESET_THEMES: ThemeConfig[] = [
   { name: '金色', primaryColor: '#FBBF24' },
   { name: '星空蓝', primaryColor: '#6366F1' },
 ];
+
+export type ExpenseCategory = 
+  | '餐饮' 
+  | '交通' 
+  | '电影' 
+  | '购物' 
+  | '娱乐' 
+  | '住宿' 
+  | '礼物' 
+  | '其他';
+
+export interface Expense {
+  id: string;
+  amount: number;
+  category: ExpenseCategory;
+  description: string;
+  date: string;
+  createdAt: string;
+}
+
+export interface DateRecord {
+  id: string;
+  date: string;
+  title: string;
+  expenses: Expense[];
+  totalAmount: number;
+  createdAt: string;
+}
+
+export type DateType = 
+  | '正式约会' 
+  | '休闲约会' 
+  | '运动约会' 
+  | '文艺约会' 
+  | '旅行约会' 
+  | '居家约会';
+
+export type Weather = 
+  | '晴天' 
+  | '多云' 
+  | '雨天' 
+  | '雪天' 
+  | '阴天';
+
+export type Season = 
+  | '春季' 
+  | '夏季' 
+  | '秋季' 
+  | '冬季';
+
+export type Atmosphere = 
+  | '浪漫' 
+  | '休闲' 
+  | '活力' 
+  | '优雅' 
+  | '复古' 
+  | '清新';
+
+export interface ClothingItem {
+  id: string;
+  name: string;
+  type: 'top' | 'bottom';
+  image: string;
+  color: string;
+  style: string;
+}
+
+export interface Outfit {
+  id: string;
+  top: ClothingItem;
+  bottom: ClothingItem;
+  suitableFor: {
+    dateTypes: DateType[];
+    weather: Weather[];
+    seasons: Season[];
+    atmospheres: Atmosphere[];
+  };
+}
+
+export interface OutfitFilters {
+  dateType: DateType | null;
+  weather: Weather | null;
+  season: Season | null;
+  atmosphere: Atmosphere | null;
+}

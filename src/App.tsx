@@ -9,6 +9,8 @@ const IdeasPage = lazy(() => import('@/pages/IdeasPage').then(m => ({ default: m
 const QuizPage = lazy(() => import('@/pages/QuizPage').then(m => ({ default: m.QuizPage })));
 const AnniversaryPage = lazy(() => import('@/pages/AnniversaryPage').then(m => ({ default: m.AnniversaryPage })));
 const LoveMessagesPage = lazy(() => import('@/pages/LoveMessagesPage').then(m => ({ default: m.LoveMessagesPage })));
+const DateRecordPage = lazy(() => import('@/pages/DateRecordPage').then(m => ({ default: m.DateRecordPage })));
+const OutfitPage = lazy(() => import('@/pages/OutfitPage').then(m => ({ default: m.OutfitPage })));
 
 function AppContent() {
   const { primaryColor } = useThemeStore();
@@ -33,6 +35,8 @@ function AppContent() {
       <Route path="/quiz" element={<QuizPage />} />
       <Route path="/anniversary" element={<AnniversaryPage />} />
       <Route path="/love-messages" element={<LoveMessagesPage />} />
+      <Route path="/date-record" element={<DateRecordPage />} />
+      <Route path="/outfit" element={<OutfitPage />} />
     </Routes>
   );
 }

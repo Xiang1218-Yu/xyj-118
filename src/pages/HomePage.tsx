@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sparkles, MapPin, ArrowRight, Calendar, Wallet, Users, Clock, Lightbulb, Layers, BookOpen, AlertCircle, MessageCircleHeart } from '../components/Icons';
+import { Heart, Sparkles, MapPin, ArrowRight, Calendar, Wallet, Users, Clock, Lightbulb, Layers, BookOpen, AlertCircle, MessageCircleHeart, Shirt, TrendingUp } from '../components/Icons';
 import { cn } from '@/lib/utils';
 import { HeartParticles } from '../components/HeartParticles';
 import { OptionCard } from '../components/OptionCard';
@@ -197,6 +197,20 @@ export function HomePage() {
                       {savedPlans.length}
                     </span>
                   )}
+                </button>
+                <button
+                  onClick={() => navigate('/date-record')}
+                  className="flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white rounded-xl border border-border hover:border-primary/30 transition-all duration-300 group"
+                >
+                  <TrendingUp size={18} className="text-emerald-500" />
+                  <span className="text-sm font-medium text-foreground hidden sm:inline">约会记账</span>
+                </button>
+                <button
+                  onClick={() => navigate('/outfit')}
+                  className="flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white rounded-xl border border-border hover:border-primary/30 transition-all duration-300 group"
+                >
+                  <Shirt size={18} className="text-violet-500" />
+                  <span className="text-sm font-medium text-foreground hidden sm:inline">穿搭推荐</span>
                 </button>
               </div>
             </div>
